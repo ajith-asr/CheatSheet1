@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codex Deck — React Cheat Sheet for HTML · CSS · JS · Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#070B14;
+  --deep:#0C1221;
+  --glass:rgba(22,30,48,.72);
+  --glass-2:rgba(30,40,62,.6);
+  --edge:rgba(120,140,190,.16);
+  --edge-hi:rgba(120,140,190,.32);
+  --text:#EAF0FF;
+  --muted:#93A0BF;
+  --faint:#5D6A88;
+  --r:16px;
+  --display:"Space Grotesk",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+[data-lang="html"]  {--a:#FF7A45;--a2:#FFB199;--ink:#2A0F04;--glow:rgba(255,122,69,.30)}
+[data-lang="css"]   {--a:#5AA9FF;--a2:#9BD0FF;--ink:#04162C;--glow:rgba(90,169,255,.30)}
+[data-lang="js"]    {--a:#FFD84D;--a2:#FFEFA8;--ink:#2A2104;--glow:rgba(255,216,77,.28)}
+[data-lang="python"]{--a:#46E39B;--a2:#A6F5CE;--ink:#03210F;--glow:rgba(70,227,155,.28)}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--void);color:var(--text);font-family:var(--display);
+  line-height:1.55;min-height:100vh;overflow-x:hidden;
+}
+#aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blob{
+  position:absolute;border-radius:50%;filter:blur(90px);opacity:.55;
+  transition:background 1.1s var(--ease);
+  animation:drift 26s ease-in-out infinite;
+}
+.blob.b1{width:52vw;height:52vw;top:-18vw;right:-12vw;background:var(--glow)}
+.blob.b2{width:40vw;height:40vw;bottom:-14vw;left:-10vw;background:var(--glow);animation-delay:-9s;opacity:.4}
+.blob.b3{width:30vw;height:30vw;top:38%;left:44%;background:var(--glow);animation-delay:-16s;opacity:.22}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(4vw,-3vw) scale(1.12)}
+  66%{transform:translate(-3vw,4vw) scale(.92)}
+}
+#grid-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(var(--edge) 1px,transparent 1px),linear-gradient(90deg,var(--edge) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 78%);
+}
+
+/* ---------- shell ---------- */
+.shell{position:relative;z-index:1;display:grid;grid-template-columns:262px 1fr;gap:26px;
+  max-width:1420px;margin:0 auto;padding:26px 24px 120px}
+
+/* ---------- sidebar ---------- */
+.side{position:sticky;top:26px;align-self:start;display:flex;flex-direction:column;gap:14px;max-height:calc(100vh - 52px);overflow-y:auto;scrollbar-width:thin}
+.brand{display:flex;align-items:center;gap:11px;padding:4px 2px 2px}
+.brand .mark{
+  width:36px;height:36px;border-radius:11px;display:grid;place-items:center;flex:none;
+  background:linear-gradient(140deg,var(--a),var(--a2));color:var(--ink);
+  font-family:var(--mono);font-weight:600;font-size:.82rem;
+  box-shadow:0 8px 22px var(--glow);transition:background .6s var(--ease),box-shadow .6s
+}
+.brand h1{font-size:1.02rem;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.brand span{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+
+.panel{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);backdrop-filter:blur(14px)}
+.langs{padding:8px;display:flex;flex-direction:column;gap:4px;position:relative}
+.lang-btn{
+  appearance:none;background:none;border:0;cursor:pointer;color:var(--muted);
+  display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;
+  font-family:var(--display);font-weight:600;font-size:.92rem;text-align:left;
+  transition:color .25s,background .25s;position:relative;z-index:1
+}
+.lang-btn:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.lang-btn.on{color:var(--ink)}
+.lang-btn:focus-visible{outline:2px solid var(--a);outline-offset:-2px}
+.lang-btn .tag{font-family:var(--mono);font-size:.7rem;opacity:.9;width:34px;flex:none}
+.lang-btn .pct{margin-left:auto;font-family:var(--mono);font-size:.68rem;opacity:.75}
+.slider{
+  position:absolute;left:8px;right:8px;height:40px;border-radius:11px;z-index:0;
+  background:linear-gradient(120deg,var(--a),var(--a2));
+  box-shadow:0 6px 20px var(--glow);
+  transition:transform .42s var(--ease),background .5s var(--ease)
+}
+
+.rings{padding:16px 14px 14px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.ring-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.ring-wrap{position:relative;width:150px;height:150px}
+.ring-center{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring-center .big{font-size:1.7rem;font-weight:700;line-height:1;color:var(--a);transition:color .5s}
+.ring-center .small{font-family:var(--mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;margin-top:3px}
+.ring-track{stroke:rgba(255,255,255,.07)}
+.ring-arc{transition:stroke-dashoffset .9s var(--ease),stroke .5s;filter:drop-shadow(0 0 6px var(--glow))}
+
+.stats{padding:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat{background:var(--glass-2);border:1px solid var(--edge);border-radius:11px;padding:9px 10px}
+.stat .n{font-size:1.15rem;font-weight:700;font-family:var(--mono);color:var(--a);transition:color .5s}
+.stat .l{font-size:.62rem;font-family:var(--mono);color:var(--muted);letter-spacing:.09em;text-transform:uppercase}
+.side-note{font-family:var(--mono);font-size:.62rem;color:var(--faint);padding:0 4px;line-height:1.6}
+.reset-link{appearance:none;background:none;border:0;color:var(--faint);font-family:var(--mono);
+  font-size:.62rem;cursor:pointer;text-decoration:underline dotted;padding:0}
+.reset-link:hover{color:var(--a)}
+
+/* ---------- main ---------- */
+.head{margin-bottom:16px}
+.eyebrow{font-family:var(--mono);font-size:.64rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--a);display:flex;align-items:center;gap:10px;transition:color .5s}
+.eyebrow::after{content:"";height:1px;flex:1;max-width:120px;background:linear-gradient(90deg,var(--a),transparent)}
+.title{font-size:clamp(1.9rem,4vw,2.9rem);font-weight:700;letter-spacing:-.025em;margin:8px 0 6px;line-height:1.05}
+.title em{font-style:normal;color:var(--a);transition:color .5s}
+.title .cursor{display:inline-block;width:3px;height:.85em;background:var(--a);vertical-align:-2px;
+  margin-left:3px;animation:blink 1.05s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+.lede{color:var(--muted);max-width:620px;font-size:.94rem}
+
+.bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:16px 0 12px}
+.find{flex:1;min-width:220px;display:flex;align-items:center;gap:10px;padding:11px 15px;
+  background:var(--glass);border:1px solid var(--edge);border-radius:13px;backdrop-filter:blur(12px);
+  transition:border-color .25s,box-shadow .25s}
+.find:focus-within{border-color:var(--a);box-shadow:0 0 0 4px var(--glow)}
+.find input{flex:1;background:none;border:0;outline:0;color:var(--text);font-family:var(--mono);font-size:.86rem;min-width:0}
+.find input::placeholder{color:var(--faint)}
+.find kbd{font-family:var(--mono);font-size:.64rem;color:var(--faint);border:1px solid var(--edge);border-radius:6px;padding:2px 6px}
+.btn{appearance:none;cursor:pointer;background:var(--glass);border:1px solid var(--edge);color:var(--muted);
+  font-family:var(--mono);font-size:.72rem;padding:11px 14px;border-radius:13px;
+  transition:color .2s,border-color .2s,transform .2s;backdrop-filter:blur(12px)}
+.btn:hover{color:var(--text);border-color:var(--a);transform:translateY(-1px)}
+.btn:focus-visible,.find:focus-within{outline:none}
+.btn:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.hits{font-family:var(--mono);font-size:.7rem;color:var(--a);min-height:1em;margin-bottom:12px;transition:color .5s}
+
+/* ---------- sections ---------- */
+.sec{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);margin-bottom:11px;
+  overflow:hidden;backdrop-filter:blur(14px);scroll-margin-top:20px;
+  animation:secIn .5s var(--ease) both}
+@keyframes secIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.sec-head{width:100%;appearance:none;background:none;border:0;cursor:pointer;color:var(--text);
+  display:flex;align-items:center;gap:13px;padding:15px 17px;text-align:left;font-family:var(--display)}
+.sec-head:hover{background:rgba(255,255,255,.03)}
+.sec-head:focus-visible{outline:2px solid var(--a);outline-offset:-2px}
+.sec-num{font-family:var(--mono);font-size:.72rem;color:var(--a);opacity:.85;width:22px;flex:none;transition:color .5s}
+.sec-name{font-weight:600;font-size:1rem;flex:1;letter-spacing:-.01em}
+.mini-bar{width:52px;height:4px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;flex:none}
+.mini-fill{height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;
+  transition:width .7s var(--ease),background .5s}
+.sec-n{font-family:var(--mono);font-size:.66rem;color:var(--faint);width:46px;text-align:right;flex:none}
+.caret{color:var(--faint);transition:transform .35s var(--ease);flex:none}
+.sec.open .caret{transform:rotate(180deg)}
+.sec-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s var(--ease)}
+.sec.open .sec-body{grid-template-rows:1fr}
+.sec-inner{overflow:hidden}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:9px;padding:2px 13px 15px}
+
+.card{background:var(--glass-2);border:1px solid var(--edge);border-radius:12px;padding:11px 12px 10px;
+  position:relative;transition:transform .22s var(--ease),border-color .22s,box-shadow .22s;
+  animation:cardIn .42s var(--ease) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+.card:hover{transform:translateY(-3px);border-color:var(--a);box-shadow:0 12px 26px rgba(0,0,0,.35),0 0 0 1px var(--glow)}
+.card.done{border-color:var(--a);background:linear-gradient(180deg,var(--glow),transparent 55%),var(--glass-2)}
+.card code{display:block;font-family:var(--mono);font-size:.8rem;font-weight:500;color:var(--text);
+  white-space:pre-wrap;word-break:break-word;padding-right:52px}
+.card .txt{display:block;font-size:.79rem;color:var(--muted);margin-top:4px}
+.card mark{background:var(--a);color:var(--ink);border-radius:3px;padding:0 2px}
+.card .txt mark{background:var(--glow);color:var(--a2)}
+.tools{position:absolute;top:8px;right:9px;display:flex;gap:5px;opacity:0;transition:opacity .2s}
+.card:hover .tools,.card.done .tools,.tools:focus-within{opacity:1}
+.tbtn{appearance:none;cursor:pointer;background:rgba(0,0,0,.35);border:1px solid var(--edge);
+  color:var(--muted);font-family:var(--mono);font-size:.6rem;border-radius:7px;padding:3px 7px;
+  transition:color .18s,border-color .18s,background .18s}
+.tbtn:hover{color:var(--a);border-color:var(--a)}
+.tbtn:focus-visible{outline:2px solid var(--a);outline-offset:1px}
+.tbtn.on{background:var(--a);color:var(--ink);border-color:transparent;font-weight:600}
+.pop{position:absolute;inset:0;border-radius:12px;pointer-events:none;
+  box-shadow:0 0 0 2px var(--a);opacity:0}
+.card.flash .pop{animation:pop .55s var(--ease)}
+@keyframes pop{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.035)}}
+
+.void{text-align:center;padding:70px 20px;font-family:var(--mono);font-size:.84rem;color:var(--muted)}
+.void b{color:var(--a)}
+
+/* ---------- playground ---------- */
+.dock{position:fixed;bottom:22px;right:22px;z-index:60;appearance:none;border:0;cursor:pointer;
+  background:linear-gradient(120deg,var(--a),var(--a2));color:var(--ink);font-family:var(--display);
+  font-weight:700;font-size:.9rem;padding:13px 22px;border-radius:99px;display:flex;gap:9px;align-items:center;
+  box-shadow:0 14px 34px var(--glow);transition:transform .25s var(--ease),background .5s}
+.dock:hover{transform:translateY(-3px) scale(1.03)}
+.dock:focus-visible{outline:2px solid var(--text);outline-offset:3px}
+.pgwrap{position:fixed;left:0;right:0;bottom:0;z-index:58;height:min(50vh,460px);
+  background:rgba(8,12,22,.94);backdrop-filter:blur(18px);border-top:1px solid var(--edge-hi);
+  display:flex;flex-direction:column;transform:translateY(103%);
+  transition:transform .42s var(--ease);box-shadow:0 -20px 60px rgba(0,0,0,.6)}
+.pgwrap.up{transform:none}
+.pgbar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--edge);flex-wrap:wrap}
+.pgtag{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--a);transition:color .5s}
+.pgt{appearance:none;cursor:pointer;background:var(--glass-2);border:1px solid var(--edge);color:var(--muted);
+  font-family:var(--mono);font-size:.71rem;padding:7px 13px;border-radius:99px;transition:all .22s}
+.pgt:hover{color:var(--text)}
+.pgt.on{background:linear-gradient(120deg,var(--a),var(--a2));color:var(--ink);border-color:transparent;font-weight:600}
+.pgt:focus-visible,.run:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.grow{flex:1}
+.run{appearance:none;cursor:pointer;border:0;border-radius:99px;font-family:var(--display);font-weight:700;
+  font-size:.83rem;padding:8px 18px;background:linear-gradient(120deg,var(--a),var(--a2));color:var(--ink);
+  display:flex;gap:8px;align-items:center;transition:transform .2s,background .5s}
+.run:hover{transform:translateY(-1px)}
+.run:disabled{opacity:.6;cursor:wait}
+.run small{font-family:var(--mono);font-size:.6rem;opacity:.7}
+.pgbody{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0}
+.ed{width:100%;height:100%;resize:none;border:0;outline:0;background:rgba(0,0,0,.28);color:var(--text);
+  font-family:var(--mono);font-size:.81rem;line-height:1.65;padding:14px 16px;tab-size:4}
+.outwrap{position:relative;border-left:1px solid var(--edge);min-height:0;background:rgba(0,0,0,.16)}
+.out{position:absolute;inset:0;overflow:auto;padding:12px 15px;font-family:var(--mono);font-size:.77rem;line-height:1.6}
+.out .ln{white-space:pre-wrap;word-break:break-word;animation:lnIn .25s var(--ease) both}
+@keyframes lnIn{from{opacity:0;transform:translateX(-5px)}to{opacity:1;transform:none}}
+.out .e{color:#FF8A8A}
+.out .r{color:var(--a)}
+.out .d{color:var(--faint);font-style:italic}
+.out .empty{color:var(--faint);font-style:italic}
+.frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+.spin{display:inline-block;width:11px;height:11px;border:2px solid var(--ink);border-right-color:transparent;
+  border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,90px);z-index:70;
+  background:linear-gradient(120deg,var(--a),var(--a2));color:var(--ink);font-weight:700;font-size:.84rem;
+  padding:10px 20px;border-radius:99px;transition:transform .35s var(--ease);pointer-events:none;
+  box-shadow:0 10px 28px var(--glow)}
+.toast.up{transform:translate(-50%,0)}
+
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr;padding:18px 16px 110px;gap:16px}
+  .side{position:static;max-height:none;flex-direction:column}
+  .langs{flex-direction:row;overflow-x:auto}
+  .lang-btn{flex:none}
+  .slider{display:none}
+  .lang-btn.on{background:linear-gradient(120deg,var(--a),var(--a2))}
+  .rings,.stats{display:none}
+  .cards{grid-template-columns:1fr}
+  .pgbody{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  .outwrap{border-left:0;border-top:1px solid var(--edge)}
+  .pgwrap{height:min(68vh,560px)}
+  .run small{display:none}
+}
+@media (hover:none){
+  .tools{position:static;opacity:1;margin-top:9px;justify-content:flex-end}
+  .card code{padding-right:0}
+  .tbtn{padding:5px 10px;font-size:.64rem}
+}
+@media (max-width:980px){ .side-note{display:none} }
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body data-lang="html">
+<div id="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div id="grid-bg"></div>
+<div id="root"></div>
+
+<script>
+var DATA = {
+html: { word:"HTML", brk:"< >", sections:[
+{t:"Document Structure",items:[
+["<!DOCTYPE html>","Declares an HTML5 document (always first line)"],
+["<html lang=\"en\">…</html>","Root element; lang helps screen readers & SEO"],
+["<head>…</head>","Page info: title, meta, links (not visible)"],
+["<title>Page</title>","Browser tab title"],
+["<meta charset=\"UTF-8\">","Character encoding — supports all languages"],
+["<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">","Makes page responsive on mobile"],
+["<meta name=\"description\" content=\"…\">","Page summary for search engines"],
+["<link rel=\"stylesheet\" href=\"style.css\">","Attach an external CSS file"],
+["<link rel=\"icon\" href=\"favicon.ico\">","Browser tab icon"],
+["<script src=\"app.js\" defer><\/script>","Attach JS; defer = run after HTML loads"],
+["<body>…</body>","All visible page content lives here"],
+["<!-- comment -->","Comment — ignored by the browser"]
+]},
+{t:"Text & Headings",items:[
+["<h1>…</h1> to <h6>…</h6>","Headings, biggest to smallest (one h1 per page)"],
+["<p>…</p>","Paragraph of text"],
+["<br>","Line break (no closing tag)"],
+["<hr>","Horizontal divider line"],
+["<strong>…</strong>","Important text (bold + meaning)"],
+["<em>…</em>","Emphasized text (italic + meaning)"],
+["<b>…</b> / <i>…</i>","Bold / italic (visual only, no meaning)"],
+["<u>…</u>","Underlined text"],
+["<mark>…</mark>","Highlighted text"],
+["<small>…</small>","Fine print / side notes"],
+["<del>…</del> / <ins>…</ins>","Deleted (strikethrough) / inserted text"],
+["<sub>…</sub> / <sup>…</sup>","Subscript (H₂O) / superscript (x²)"],
+["<blockquote cite=\"url\">…</blockquote>","Long quoted section"],
+["<q>…</q>","Short inline quote (adds quotation marks)"],
+["<abbr title=\"HyperText…\">HTML</abbr>","Abbreviation — full form shows on hover"],
+["<code>…</code>","Inline code snippet"],
+["<pre>…</pre>","Preserves spaces & line breaks (code blocks)"],
+["<kbd>Ctrl</kbd>","Keyboard key styling"],
+["<address>…</address>","Contact information block"]
+]},
+{t:"Links & Navigation",items:[
+["<a href=\"https://site.com\">Visit</a>","Hyperlink to another page"],
+["<a href=\"page.html\">…</a>","Link to a page in your own site (relative)"],
+["<a href=\"#section-id\">…</a>","Jump to an element on the same page"],
+["<a href=\"…\" target=\"_blank\" rel=\"noopener\">…</a>","Open link in a new tab (safely)"],
+["<a href=\"mailto:hi@x.com\">…</a>","Opens the user's email app"],
+["<a href=\"tel:+9198…\">…</a>","Tap to call on phones"],
+["<a href=\"file.pdf\" download>…</a>","Downloads the file instead of opening"],
+["<nav>…</nav>","Wrapper for main navigation links"]
+]},
+{t:"Images & Media",items:[
+["<img src=\"cat.jpg\" alt=\"A cat\">","Image; alt describes it (accessibility + SEO)"],
+["<img … width=\"400\" height=\"300\">","Set size — prevents layout jumping"],
+["<img … loading=\"lazy\">","Load image only when scrolled into view"],
+["<figure><img …><figcaption>Caption</figcaption></figure>","Image with a caption"],
+["<picture><source srcset=\"big.webp\" media=\"(min-width:800px)\"><img src=\"small.jpg\" alt=\"\"></picture>","Different images for different screens/formats"],
+["<video src=\"clip.mp4\" controls poster=\"thumb.jpg\"></video>","Video player with controls & preview image"],
+["<audio src=\"song.mp3\" controls></audio>","Audio player"],
+["<source src=\"clip.webm\" type=\"video/webm\">","Alternative file formats inside video/audio"],
+["<track src=\"subs.vtt\" kind=\"subtitles\">","Subtitles for video"],
+["<iframe src=\"https://maps…\" title=\"Map\"></iframe>","Embed another page (maps, YouTube)"],
+["<svg>…</svg>","Scalable vector graphics drawn in code"],
+["<canvas id=\"c\"></canvas>","Drawing surface controlled by JavaScript"]
+]},
+{t:"Lists",items:[
+["<ul><li>Item</li></ul>","Unordered (bullet) list"],
+["<ol><li>Step</li></ol>","Ordered (numbered) list"],
+["<ol start=\"5\">…</ol>","Numbering starts at 5"],
+["<ol reversed>…</ol>","Counts downwards"],
+["<ol type=\"A\">…</ol>","A, B, C… (also a, i, I)"],
+["<dl><dt>Term</dt><dd>Definition</dd></dl>","Description list (term + meaning)"],
+["<ul><li>Item<ul><li>Sub</li></ul></li></ul>","Nested list — list inside a list item"]
+]},
+{t:"Tables",items:[
+["<table>…</table>","Table container"],
+["<tr>…</tr>","Table row"],
+["<th>Name</th>","Header cell (bold, centered)"],
+["<td>Ram</td>","Data cell"],
+["<thead> <tbody> <tfoot>","Group header / body / footer rows"],
+["<caption>Sales 2026</caption>","Table title (first child of table)"],
+["<td colspan=\"2\">…</td>","Cell spans 2 columns"],
+["<td rowspan=\"3\">…</td>","Cell spans 3 rows"],
+["<th scope=\"col\">…</th>","Tells screen readers what the header labels"]
+]},
+{t:"Forms & Inputs",items:[
+["<form action=\"/save\" method=\"post\">…</form>","Form; action = where data goes"],
+["<label for=\"em\">Email</label> <input id=\"em\">","Label linked to input (click label = focus input)"],
+["<input type=\"text\">","Single-line text box"],
+["<input type=\"email\"> / type=\"password\"","Email (auto-validated) / hidden characters"],
+["<input type=\"number\" min=\"1\" max=\"10\">","Numbers only, with limits"],
+["<input type=\"checkbox\" checked>","Tick box (checked = on by default)"],
+["<input type=\"radio\" name=\"size\">","Pick ONE option (same name = one group)"],
+["<input type=\"date\"> / \"time\" / \"color\" / \"file\" / \"range\"","Date picker / time / color / file upload / slider"],
+["<input type=\"search\"> / \"url\" / \"tel\" / \"hidden\"","Search box / URL / phone / invisible value"],
+["<textarea rows=\"4\">…</textarea>","Multi-line text box"],
+["<select><option value=\"in\">India</option></select>","Dropdown menu"],
+["<optgroup label=\"Asia\">…</optgroup>","Group options inside a dropdown"],
+["<button type=\"submit\">Send</button>","Submits the form (also: button, reset)"],
+["<fieldset><legend>Address</legend>…</fieldset>","Group related fields with a title"],
+["<datalist id=\"opts\"><option value=\"…\"></datalist>","Autocomplete suggestions for an input"],
+["<progress value=\"70\" max=\"100\"></progress>","Progress bar"],
+["<meter value=\"0.6\"></meter>","Gauge (disk usage, score)"],
+["<output>42</output>","Shows a calculation result"]
+]},
+{t:"Form Attributes",items:[
+["required","Field must be filled before submit"],
+["placeholder=\"Enter name…\"","Grey hint text inside the field"],
+["value=\"default\"","Pre-filled value"],
+["name=\"email\"","Key used when data is sent to server"],
+["disabled","Field is greyed out & unusable"],
+["readonly","Visible & copyable, but not editable"],
+["min / max / step","Limits for numbers, dates, ranges"],
+["maxlength=\"20\"","Maximum characters allowed"],
+["pattern=\"[0-9]{6}\"","Must match this regex (e.g. 6-digit PIN)"],
+["autocomplete=\"email\"","Lets the browser auto-fill"],
+["autofocus","Cursor lands here on page load"],
+["multiple","Allow many files / selections"],
+["selected","Default option in a dropdown"]
+]},
+{t:"Semantic Layout",items:[
+["<header>…</header>","Top of page or section (logo, title, nav)"],
+["<nav>…</nav>","Main navigation links"],
+["<main>…</main>","The unique main content (one per page)"],
+["<section>…</section>","A themed group of content (usually with a heading)"],
+["<article>…</article>","Self-contained piece (blog post, card, comment)"],
+["<aside>…</aside>","Side content (sidebar, related links)"],
+["<footer>…</footer>","Bottom of page or section"],
+["<div>…</div>","Generic block container (no meaning) — last resort"],
+["<span>…</span>","Generic inline container (no meaning)"],
+["<details><summary>More</summary>hidden text</details>","Built-in expand/collapse widget"],
+["<dialog open>…</dialog>","Popup / modal box (control with JS)"],
+["<time datetime=\"2026-07-06\">today</time>","Machine-readable date/time"],
+["<template>…</template>","Hidden HTML to clone later with JS"]
+]},
+{t:"Global Attributes & Entities",items:[
+["id=\"unique-name\"","Unique identifier (one per page)"],
+["class=\"card featured\"","Reusable label(s) for CSS/JS — space separated"],
+["style=\"color:red\"","Inline CSS (avoid — use stylesheets)"],
+["title=\"tooltip text\"","Tooltip on hover"],
+["data-user-id=\"42\"","Custom data attribute (read via JS dataset)"],
+["hidden","Hides the element completely"],
+["contenteditable=\"true\"","User can edit the text directly"],
+["tabindex=\"0\"","Makes element keyboard-focusable"],
+["aria-label=\"Close menu\"","Accessible name for screen readers"],
+["role=\"button\"","Tells assistive tech what the element acts as"],
+["lang=\"ta\"","Language of this element's text"],
+["&amp; &lt; &gt;","Entities for & < > (can't type these raw)"],
+["&nbsp; &copy; &rarr;","Non-breaking space, ©, →"]
+]}
+]},
+css: { word:"CSS", brk:"{ }", sections:[
+{t:"Basics & Applying CSS",items:[
+["selector { property: value; }","The anatomy of every CSS rule"],
+["<link rel=\"stylesheet\" href=\"style.css\">","External stylesheet (best practice)"],
+["<style> p { color:red } </style>","Internal CSS inside <head>"],
+["style=\"color:red\"","Inline CSS on one element (avoid)"],
+["/* comment */","CSS comment"],
+["@import url(\"base.css\");","Load another stylesheet inside CSS"],
+["inherit / initial / unset","Take parent value / default value / auto-decide"],
+["!important","Force a rule to win — use as last resort"]
+]},
+{t:"Selectors",items:[
+["*","Every element"],
+["p","All <p> elements (type selector)"],
+[".card","All elements with class=\"card\""],
+["#logo","The element with id=\"logo\""],
+["h1, h2, p","Group — same rules for several selectors"],
+["div p","Descendant — any <p> inside a <div>"],
+["div > p","Child — <p> directly inside <div>"],
+["h2 + p","Adjacent sibling — <p> right after <h2>"],
+["h2 ~ p","All <p> siblings after <h2>"],
+["[disabled]","Elements having that attribute"],
+["[type=\"email\"]","Attribute equals value"],
+["[href^=\"https\"]","Attribute starts with…"],
+["[href$=\".pdf\"]","Attribute ends with…"],
+["[class*=\"btn\"]","Attribute contains…"]
+]},
+{t:"Pseudo-classes",items:[
+[":hover","Mouse is over the element"],
+[":focus / :focus-visible","Element is focused (visible = keyboard only)"],
+[":active","Being clicked right now"],
+[":visited","Link already visited"],
+[":first-child / :last-child","First / last child of its parent"],
+[":nth-child(3)","The 3rd child"],
+[":nth-child(2n) / :nth-child(odd)","Every even / odd child (zebra stripes)"],
+[":not(.active)","Everything except .active"],
+[":is(h1, h2, h3)","Matches any in the list (shorter selectors)"],
+[":where(h1, h2)","Same as :is but zero specificity"],
+[":has(img)","Parent that contains an image (parent selector!)"],
+[":checked / :disabled / :required","Form states"],
+[":empty","Element with no children"],
+[":root","The <html> element (define variables here)"]
+]},
+{t:"Pseudo-elements",items:[
+["::before { content:\"→\" }","Insert content before element's content"],
+["::after { content:\"\" }","Insert after (decorations, icons, overlays)"],
+["::first-letter","Style just the first letter (drop caps)"],
+["::first-line","Style the first line of text"],
+["::selection","Style highlighted/selected text"],
+["::placeholder","Style input placeholder text"],
+["::marker","Style list bullets/numbers"]
+]},
+{t:"Colors & Units",items:[
+["color: red;","Named color (140+ names)"],
+["#ff5733 / #f53","Hex color (short form = doubled digits)"],
+["rgb(255 87 51)","Red green blue (0–255)"],
+["rgb(255 87 51 / 0.5)","With 50% transparency"],
+["hsl(14 100% 60%)","Hue (0–360°), saturation, lightness — easy to tweak"],
+["transparent / currentColor","Fully clear / same as text color"],
+["px","Fixed pixels"],
+["% ","Relative to parent"],
+["em / rem","Relative to element font size / root font size ✓"],
+["vw / vh","1% of viewport width / height"],
+["vmin / vmax","1% of the smaller / larger viewport side"],
+["ch / fr / deg / s","Character width / grid fraction / degrees / seconds"]
+]},
+{t:"Box Model",items:[
+["width / height","Content size"],
+["min-width / max-width","Size limits (great for responsive)"],
+["padding: 10px 20px;","Inner space — top/bottom 10, left/right 20"],
+["margin: 16px;","Outer space around the element"],
+["margin: 0 auto;","Center a block horizontally"],
+["border: 2px solid black;","Width, style (solid/dashed/dotted), color"],
+["border-radius: 12px;","Rounded corners (50% = circle)"],
+["box-sizing: border-box;","Width includes padding + border ✓ use always"],
+["outline: 2px solid blue;","Ring outside border (focus states; no layout shift)"],
+["box-shadow: 0 4px 12px rgb(0 0 0 / .2);","Drop shadow: x y blur color"],
+["aspect-ratio: 16 / 9;","Lock width-to-height ratio"],
+["overflow: hidden / scroll / auto;","What happens when content is too big"]
+]},
+{t:"Typography",items:[
+["font-family: \"Inter\", sans-serif;","Font + fallback"],
+["font-size: 1.1rem;","Text size"],
+["font-weight: 400 / 700 / bold;","Thickness"],
+["font-style: italic;","Italic text"],
+["line-height: 1.6;","Space between lines (unitless ✓)"],
+["letter-spacing: 0.05em;","Space between letters"],
+["text-align: left / center / right / justify;","Horizontal alignment"],
+["text-decoration: underline / none;","Underline, strike — none removes link underline"],
+["text-transform: uppercase / capitalize;","Change letter case"],
+["text-indent: 2em;","Indent first line"],
+["white-space: nowrap / pre-wrap;","Stop wrapping / keep line breaks"],
+["text-overflow: ellipsis;","Show … for cut text (with overflow:hidden + nowrap)"],
+["word-break: break-word;","Break long words to prevent overflow"],
+["text-shadow: 1px 1px 3px gray;","Shadow behind text"],
+["@font-face { font-family:\"My\"; src:url(my.woff2) }","Load a custom font file"]
+]},
+{t:"Backgrounds & Gradients",items:[
+["background-color: #eee;","Fill color"],
+["background-image: url(\"bg.jpg\");","Background picture"],
+["background-size: cover / contain;","Fill area (crop) / fit fully (no crop)"],
+["background-position: center;","Where the image sits"],
+["background-repeat: no-repeat;","Stop tiling"],
+["background-attachment: fixed;","Image stays while page scrolls (parallax)"],
+["background: url(a.jpg) center/cover no-repeat;","Shorthand"],
+["linear-gradient(to right, red, blue)","Color fade in a direction (or 45deg)"],
+["radial-gradient(circle, red, blue)","Fade from the center outward"],
+["conic-gradient(red, yellow, red)","Fade around a circle (pie charts)"],
+["background: url(a.png), linear-gradient(…);","Multiple layered backgrounds"]
+]},
+{t:"Display, Position & Z-index",items:[
+["display: block;","Full width, starts new line (div, p)"],
+["display: inline;","Flows in text; width/height ignored (span, a)"],
+["display: inline-block;","Flows in text but accepts width/height"],
+["display: none;","Removed completely (vs visibility:hidden = invisible but keeps space)"],
+["display: flex / grid;","Enable flexbox / grid layout"],
+["opacity: 0.5;","50% see-through (still clickable)"],
+["position: static;","Default — normal flow"],
+["position: relative;","Nudge from normal spot; anchor for absolute children"],
+["position: absolute; top:0; right:0;","Pin to nearest positioned ancestor"],
+["position: fixed;","Pin to the screen (stays on scroll)"],
+["position: sticky; top:0;","Scrolls, then sticks (sticky headers)"],
+["z-index: 10;","Stacking order — higher = on top (needs position)"],
+["inset: 0;","Shorthand for top/right/bottom/left: 0"]
+]},
+{t:"Flexbox (1-D layout)",items:[
+["display: flex;","Children line up in a row (on the parent)"],
+["flex-direction: row / column;","Main axis: horizontal / vertical"],
+["justify-content: center;","Align along main axis: flex-start, center, space-between, space-around, space-evenly"],
+["align-items: center;","Align along cross axis: stretch, center, flex-start, flex-end"],
+["flex-wrap: wrap;","Items flow to next line when full"],
+["gap: 16px;","Space between items ✓"],
+["flex-grow: 1;","Item stretches to fill spare space"],
+["flex-shrink: 0;","Item refuses to shrink"],
+["flex-basis: 200px;","Item's starting size"],
+["flex: 1;","Shorthand grow shrink basis"],
+["align-self: flex-end;","Override alignment for ONE item"],
+["order: 2;","Change visual order without moving HTML"],
+["align-content: center;","Align multiple wrapped lines"]
+]},
+{t:"Grid (2-D layout)",items:[
+["display: grid;","Enable grid on the parent"],
+["grid-template-columns: 1fr 2fr 1fr;","3 columns; fr = share of free space"],
+["grid-template-columns: repeat(3, 1fr);","3 equal columns"],
+["repeat(auto-fit, minmax(250px, 1fr))","Responsive columns with NO media queries ✨"],
+["grid-template-rows: 100px auto;","Row heights"],
+["gap: 20px; / row-gap / column-gap","Spacing between cells"],
+["grid-column: 1 / 3;","Item spans column line 1 to 3"],
+["grid-column: span 2;","Item spans 2 columns"],
+["grid-row: span 2;","Item spans 2 rows"],
+["grid-template-areas: \"nav nav\" \"side main\";","Name regions, then place with grid-area"],
+["grid-area: main;","Put item in a named region"],
+["place-items: center;","Center everything (align + justify)"]
+]},
+{t:"Transitions, Animations & Transforms",items:[
+["transition: all 0.3s ease;","Smoothly animate property changes"],
+["transition: transform .2s, opacity .4s;","Different timing per property"],
+["transition-delay: 0.1s;","Wait before starting"],
+["ease / linear / ease-in-out / cubic-bezier(…)","Speed curves"],
+["@keyframes slide { from{left:0} to{left:100px} }","Define animation steps (or 0%, 50%, 100%)"],
+["animation: slide 2s ease infinite;","Run keyframes: name duration timing repeat"],
+["animation-direction: alternate;","Play forward then backward"],
+["animation-fill-mode: forwards;","Keep the final state after ending"],
+["transform: translate(10px, 20px);","Move element (translateX / translateY)"],
+["transform: scale(1.2);","Grow / shrink"],
+["transform: rotate(45deg);","Rotate"],
+["transform: skew(10deg);","Slant"],
+["transform-origin: top left;","Point the transform pivots around"],
+["filter: blur(4px) brightness(1.2);","Visual effects: grayscale, drop-shadow, contrast…"],
+["backdrop-filter: blur(10px);","Frosted-glass effect on what's behind"]
+]},
+{t:"Responsive Design & Media Queries",items:[
+["@media (max-width: 768px) { … }","Rules apply on screens ≤ 768px"],
+["@media (min-width: 1024px) { … }","Rules for screens ≥ 1024px (mobile-first ✓)"],
+["@media (orientation: landscape) { … }","Device is sideways"],
+["@media (prefers-color-scheme: dark) { … }","User's OS is in dark mode"],
+["@media (prefers-reduced-motion: reduce) { … }","User wants less animation — respect it"],
+["@container (min-width: 400px) { … }","React to the PARENT size (container queries)"],
+["font-size: clamp(1rem, 2.5vw, 1.5rem);","Fluid size with min & max — magic ✨"],
+["width: min(90%, 1200px);","Whichever is smaller (responsive containers)"]
+]},
+{t:"Variables & Functions",items:[
+[":root { --brand: #06f; }","Define a custom property (variable)"],
+["color: var(--brand);","Use a variable"],
+["var(--brand, blue)","Fallback if variable is missing"],
+["width: calc(100% - 60px);","Math with mixed units"],
+["clamp(min, preferred, max)","Value locked between limits"],
+["min(a, b) / max(a, b)","Pick the smaller / larger value"],
+["@supports (display: grid) { … }","Apply only if the browser supports it"]
+]},
+{t:"Useful Extras",items:[
+["cursor: pointer;","Hand cursor (buttons, links)"],
+["pointer-events: none;","Element ignores clicks"],
+["user-select: none;","Text cannot be selected"],
+["object-fit: cover;","Crop <img>/<video> to fill its box nicely"],
+["list-style: none;","Remove bullets (then padding:0)"],
+["scroll-behavior: smooth;","Smooth scrolling for anchor jumps"],
+["scroll-snap-type: x mandatory;","Carousel-style snap scrolling"],
+["columns: 3;","Newspaper-style text columns"],
+["float: left; / clear: both;","Old layout method — wrap text around images"],
+["Specificity order","inline style > #id > .class/[attr]/:hover > element — more specific wins"]
+]}
+]},
+js: { word:"JavaScript", brk:"( )", sections:[
+{t:"Basics & Console",items:[
+["console.log(x)","Print to console (debugging)"],
+["console.error(x) / console.warn(x)","Print error / warning"],
+["console.table(arr)","Show array/object as a table"],
+["alert(\"Hi\") / prompt(\"Name?\") / confirm(\"Sure?\")","Popup / ask input / OK-Cancel"],
+["// comment  and  /* block */","Comments"],
+["\"use strict\";","Catch silent errors (auto in modules)"]
+]},
+{t:"Variables & Data Types",items:[
+["const x = 5;","Cannot be reassigned — use by default ✓"],
+["let x = 5;","Can be changed later, block-scoped"],
+["var x = 5;","Old, function-scoped — avoid ✗"],
+["String, Number, BigInt, Boolean, undefined, null, Symbol","The 7 primitive types"],
+["Object, Array, Function","Reference types (stored by reference)"],
+["typeof x","Type as a string (typeof null is \"object\" — famous bug)"],
+["Array.isArray(x)","Correct way to check for an array"],
+["Number(\"12\") / String(99) / Boolean(v)","Convert between types"],
+["parseInt(\"42px\") / parseFloat(\"3.14m\")","Read number from start of a string"],
+["Falsy: 0, \"\", null, undefined, NaN, false","Everything else is truthy (even [] and {})"]
+]},
+{t:"Operators",items:[
+["+ - * / % **","Math: remainder %, power **"],
+["x++ / x--","Increase / decrease by 1"],
+["+= -= *= /=","Shorthand: x += 5 means x = x + 5"],
+["=== / !==","Strict equal / not equal (checks type too) ✓"],
+["== / !=","Loose equal — converts types, avoid ✗"],
+["&& || !","AND / OR / NOT"],
+["cond ? a : b","Ternary: if cond then a else b"],
+["a ?? b","b only if a is null/undefined (keeps 0 and \"\")"],
+["obj?.prop / obj?.method?.()","Optional chaining — safe access, no crash"],
+["x ??= y  |  x ||= y  |  x &&= y","Assign only if nullish / falsy / truthy"]
+]},
+{t:"Conditionals & Loops",items:[
+["if (c) {…} else if (c2) {…} else {…}","Run different code by condition"],
+["switch (v) { case \"a\": …; break; default: … }","Compare one value to many options"],
+["for (let i = 0; i < 5; i++) {…}","Repeat a known number of times"],
+["for (const item of array) {…}","Loop array VALUES ✓"],
+["for (const key in object) {…}","Loop object KEYS"],
+["while (c) {…}  /  do {…} while (c);","Repeat until false / at least once"],
+["break / continue","Exit loop / skip to next round"]
+]},
+{t:"Functions",items:[
+["function greet(name) { return \"Hi \" + name; }","Declaration (hoisted — usable before defined)"],
+["const greet = (name) => \"Hi \" + name;","Arrow function ✓ (no own this)"],
+["const sq = x => x * x;","One param: no ( ); one line: auto-return"],
+["function f(a, b = 10) {…}","Default parameter value"],
+["function sum(...nums) {…}","Rest — collect all arguments into an array"],
+["(() => { … })();","IIFE — runs immediately once"],
+["setTimeout(() => {…}, 1000)","Callback — a function passed to another function"],
+["const add = a => b => a + b;  add(2)(3) → 5","Currying — one argument per call"]
+]},
+{t:"Strings",items:[
+["`Hello ${name}`","Template literal — embed variables ✓"],
+["str.length / str[0] / str.at(-1)","Length / first char / last char"],
+["str.toUpperCase() / toLowerCase()","Change case"],
+["str.trim()","Remove spaces at both ends"],
+["str.includes(\"lo\") / startsWith / endsWith","Contains / starts / ends checks"],
+["str.indexOf(\"a\")","Position of first match (−1 if none)"],
+["str.slice(1, 4)","Cut portion (end index not included)"],
+["str.replace(\"a\",\"b\") / replaceAll(\"a\",\"b\")","Swap first / all occurrences"],
+["str.split(\",\")","String → array: \"a,b\" → [\"a\",\"b\"]"],
+["str.repeat(3) / padStart(5,\"0\")","\"hihihi\" / \"00042\""],
+["Strings are immutable","Methods return NEW strings; original never changes"]
+]},
+{t:"Numbers & Math",items:[
+["num.toFixed(2)","Round to 2 decimals (returns a string)"],
+["Math.round(4.5) / floor(4.9) / ceil(4.1)","Nearest / down / up"],
+["Math.abs(-7) / Math.trunc(4.9)","Positive value / chop decimals"],
+["Math.pow(2,3) / Math.sqrt(16)","Power / square root"],
+["Math.min(...arr) / Math.max(...arr)","Smallest / largest"],
+["Math.random()","Random decimal 0–1"],
+["Math.floor(Math.random() * 10) + 1","Random integer 1–10"],
+["Number.isInteger(x) / Number.isNaN(x)","Safe checks"]
+]},
+{t:"Arrays",items:[
+["arr.push(x) / arr.pop()","Add / remove at END (mutates)"],
+["arr.unshift(x) / arr.shift()","Add / remove at START (mutates)"],
+["arr.splice(1, 2)","Remove 2 items at index 1 (or insert)"],
+["arr.sort((a,b) => a - b)","Sort numbers ascending (b - a = descending)"],
+["arr.includes(3) / arr.indexOf(3)","Exists? / position"],
+["arr.find(x => x > 2) / findIndex(…)","First matching value / its index"],
+["arr.some(fn) / arr.every(fn)","At least one matches / all match"],
+["arr.map(x => x * 2)","NEW array, each item transformed ✓"],
+["arr.filter(x => x > 2)","NEW array, only matching items ✓"],
+["arr.reduce((sum, x) => sum + x, 0)","Combine everything into ONE value ✓"],
+["arr.forEach(x => {…})","Run a function per item (no return)"],
+["arr.slice(1, 3) / [...arr]","Copy a portion / copy the whole array"],
+["arr.concat(b) / arr.join(\"-\") / arr.flat()","Merge / to string / flatten nested"],
+["arr.at(-1) / arr.toSorted() / toReversed()","Last item / sorted COPY / reversed COPY"],
+["[...new Set(arr)]","Remove duplicates ✨"]
+]},
+{t:"Objects",items:[
+["const user = { name: \"Ram\", age: 25 };","Key: value pairs"],
+["user.name  /  user[\"name\"]","Dot / bracket access (bracket = dynamic keys)"],
+["user.city = \"Chennai\"; / delete user.age;","Add-update / remove"],
+["\"name\" in user","Does the key exist?"],
+["{ name, age }","Shorthand for { name: name, age: age }"],
+["Object.keys(o) / values(o) / entries(o)","Arrays of keys / values / [key,value] pairs"],
+["Object.assign({}, o) / {...o}","Shallow copy or merge"],
+["structuredClone(o)","DEEP copy — nested objects too ✓"],
+["Object.freeze(o)","Lock object — no changes allowed"],
+["JSON.stringify(o) / JSON.parse(str)","Object → JSON text / JSON text → object"]
+]},
+{t:"Destructuring, Spread & Rest",items:[
+["const { name, age } = user;","Unpack object properties"],
+["const { name: n, city = \"NA\" } = user;","Rename + default value"],
+["const [a, b] = [1, 2];","Unpack array values"],
+["[a, b] = [b, a];","Swap two variables ✨"],
+["function show({ name }) {…}","Destructure right in the parameters"],
+["[...arr1, ...arr2] / {...o1, ...o2}","Spread OUT — merge arrays / objects"],
+["Math.max(...nums)","Spread array as separate arguments"],
+["const [first, ...rest] = arr;","Rest IN — first item, remainder as array"]
+]},
+{t:"Scope, Closures & this",items:[
+["Global / function / block scope","Where a variable is visible ({ } blocks for let/const)"],
+["Hoisting","Declarations move up; var = undefined, let/const = locked until their line"],
+["Closure","Inner function REMEMBERS outer variables after outer returns"],
+["function counter(){ let c=0; return () => ++c; }","Classic closure — private counter"],
+["this in obj.method()","= the object before the dot"],
+["this in arrow function","Borrowed from surrounding code (no own this)"],
+["fn.call(obj, a, b) / fn.apply(obj, [a,b])","Call fn with a chosen this"],
+["fn.bind(obj)","New function permanently tied to obj"]
+]},
+{t:"Classes & OOP",items:[
+["class Person { constructor(name){ this.name = name } }","Blueprint; constructor runs on new"],
+["const p = new Person(\"Ram\");","Create an instance"],
+["greet() { return `Hi ${this.name}` }","Method inside a class"],
+["class Student extends Person { … }","Inheritance — reuse parent code"],
+["super(name); / super.greet();","Call parent constructor / parent method"],
+["static create() {…}","Called on the class itself: Person.create()"],
+["#secret = 1;","Private field — only inside the class"],
+["get full() {…} / set full(v) {…}","Read/write like a property: p.full"],
+["Person.prototype","Shared object all instances borrow methods from"],
+["Object.create(proto) / Object.getPrototypeOf(o)","Create with prototype / inspect it"]
+]},
+{t:"Error Handling",items:[
+["try { … } catch (err) { … } finally { … }","Try risky code, handle failure, always cleanup"],
+["err.name / err.message / err.stack","Error details"],
+["throw new Error(\"Something broke\")","Create your own error"],
+["TypeError, RangeError, SyntaxError, ReferenceError","Built-in error types"],
+["class MyError extends Error { … }","Custom error class"]
+]},
+{t:"Async: Promises & await",items:[
+["new Promise((resolve, reject) => {…})","A value that arrives later (pending → fulfilled/rejected)"],
+["p.then(v => …).catch(e => …).finally(() => …)","On success / failure / always"],
+["async function f() { … }","Function that returns a promise"],
+["const data = await promise;","Pause here until the promise settles ✓"],
+["try { await f() } catch (e) { … }","Error handling with await"],
+["Promise.all([p1, p2])","Wait for ALL (fails if any fails)"],
+["Promise.allSettled([…])","Wait for all; get each result, never throws"],
+["Promise.race([…]) / Promise.any([…])","First to finish / first to SUCCEED"],
+["Microtasks before macrotasks","Promises run before setTimeout in the event loop"]
+]},
+{t:"Fetch API (HTTP)",items:[
+["const res = await fetch(url);","GET request"],
+["if (!res.ok) throw new Error(res.status);","Check for 404 / 500"],
+["const data = await res.json();","Parse the JSON body"],
+["fetch(url, { method: \"POST\", headers: { \"Content-Type\": \"application/json\" }, body: JSON.stringify(obj) })","Send data"],
+["Methods: GET POST PUT PATCH DELETE","Read / create / replace / edit / remove"],
+["res.status / res.text()","Status code / body as plain text"]
+]},
+{t:"DOM: Select & Change",items:[
+["document.querySelector(\".btn\")","FIRST match — any CSS selector ✓"],
+["document.querySelectorAll(\"li\")","ALL matches (loop with forEach)"],
+["document.getElementById(\"id\")","Select by id"],
+["el.textContent = \"Hi\"","Change text (safe ✓)"],
+["el.innerHTML = \"<b>Hi</b>\"","Change HTML (risky with user input)"],
+["input.value","Get / set a form field's value"],
+["el.classList.add(\"on\") / remove / toggle / contains","Manage classes ✓"],
+["el.style.backgroundColor = \"red\"","Inline style (camelCase)"],
+["el.setAttribute(\"src\", \"a.png\") / getAttribute","Set / read attributes"],
+["el.dataset.userId","Read data-user-id=\"…\""],
+["document.createElement(\"div\")","Make a new element"],
+["parent.append(el) / prepend(el) / el.remove()","Insert at end / start / delete"],
+["el.closest(\".card\") / el.parentElement / el.children","Walk the tree"]
+]},
+{t:"Events",items:[
+["el.addEventListener(\"click\", e => {…})","React to events ✓"],
+["el.removeEventListener(\"click\", fn)","Stop listening (fn must be named)"],
+["e.target / e.currentTarget","Element clicked / element with the listener"],
+["e.preventDefault()","Stop default (form reload, link jump)"],
+["e.stopPropagation()","Stop bubbling to parents"],
+["e.key","Which keyboard key (keydown/keyup)"],
+["Types: click, input, change, submit, keydown, scroll, DOMContentLoaded","The everyday events"],
+["Delegation: list.addEventListener(\"click\", e => { if (e.target.matches(\"li\")) … })","ONE parent listener handles all children ✓"],
+["addEventListener(\"click\", fn, { once: true })","Runs only one time"]
+]},
+{t:"Storage & Timers",items:[
+["localStorage.setItem(\"key\", value)","Save (stays forever, string only)"],
+["localStorage.getItem(\"key\")","Read (string or null)"],
+["localStorage.removeItem(\"key\") / clear()","Delete one / all"],
+["sessionStorage","Same API — cleared when the tab closes"],
+["JSON.stringify to save, JSON.parse to read","Storing objects in storage"],
+["setTimeout(fn, 2000)","Run once after 2 s"],
+["setInterval(fn, 1000)","Run every 1 s"],
+["clearTimeout(id) / clearInterval(id)","Cancel them"]
+]},
+{t:"Modules",items:[
+["<script type=\"module\" src=\"app.js\">","Enable modules in HTML"],
+["export const x = 5;","Named export (many per file)"],
+["export default MyClass;","Default export (one per file)"],
+["import { x, f } from \"./utils.js\";","Import named (exact names)"],
+["import MyClass from \"./c.js\";","Import the default (any name)"],
+["import * as utils from \"./u.js\";","Everything as one object"],
+["const mod = await import(\"./m.js\");","Dynamic import — load on demand"]
+]},
+{t:"Map, Set & Modern Extras",items:[
+["const m = new Map(); m.set(k, v); m.get(k)","Key→value pairs; keys can be ANY type"],
+["m.has(k) / m.delete(k) / m.size","Check / remove / count"],
+["const s = new Set([1, 2, 2]);","Unique values only → {1, 2}"],
+["s.add(x) / s.has(x) / s.delete(x)","Manage a set"],
+["WeakMap / WeakSet","Object keys, auto-cleaned by garbage collector"],
+["function* gen() { yield 1; yield 2; }","Generator — pauses at each yield"],
+["gen().next() → { value, done }","Resume step by step"],
+["Symbol(\"id\")","Guaranteed-unique value (hidden object keys)"],
+["123_456_789 / 10n","Numeric separators / BigInt"],
+["Object.groupBy(arr, fn)","Group array items into an object (ES2024)"]
+]},
+{t:"Regex & Dates",items:[
+["/pattern/gi","Regex between slashes; g = all, i = ignore case"],
+["\\d \\w \\s  and  \\D \\W \\S","Digit / word char / space — capitals = NOT"],
+["^ $ . * + ? {2,4}","Start, end, any char, 0+, 1+, optional, count range"],
+["[abc] [^abc] [a-z] (x|y)","Any of / none of / range / OR + group"],
+["regex.test(str) / str.match(regex) / str.replace(regex, \"new\")","Check / extract / swap"],
+["new Date() / Date.now()","Current date-time / timestamp in ms"],
+["d.getFullYear() / getMonth() / getDate() / getDay()","Year / month (0 = Jan ⚠) / day / weekday (0 = Sun)"],
+["d.getHours() / getMinutes() / getTime()","Time parts / ms since 1970"],
+["d.toLocaleDateString(\"en-IN\") / d.toISOString()","Local format / standard format"],
+["date2 - date1","Difference in milliseconds"]
+]}
+]},
+python: { word:"Python", brk:">>>", sections:[
+{t:"Basics & print",items:[
+["print(\"Hello\")","Print to the screen"],
+["print(a, b, sep=\"-\", end=\"!\")","Custom separator & line ending"],
+["name = input(\"Name? \")","Ask user for input (always returns a string)"],
+["# comment","Single-line comment"],
+["\"\"\"docstring / multi-line\"\"\"","Triple quotes — multi-line text or docs"],
+["x = 5","Create a variable — no keyword needed"],
+["a, b = 1, 2","Multiple assignment (a=1, b=2)"],
+["a, b = b, a","Swap two variables ✨"],
+["snake_case","Naming style for variables & functions"],
+["type(x) / help(len)","Check a value's type / read built-in docs"],
+["Indentation matters!","Blocks are made by 4-space indents, not { }"]
+]},
+{t:"Data Types & Conversion",items:[
+["int, float, str, bool","42 / 3.14 / \"text\" / True, False (capital!)"],
+["None","Empty value (like null)"],
+["list [1, 2] / tuple (1, 2) / dict {\"a\": 1} / set {1, 2}","The 4 collections"],
+["int(\"12\") / float(\"3.1\") / str(99)","Convert between types"],
+["list(\"abc\")","→ [\"a\", \"b\", \"c\"]"],
+["bool(x)","Falsy: 0, \"\", None, [], {}, () — else True"],
+["isinstance(x, int)","Safe type check"],
+["x = 10_000_000","Underscores for readability"]
+]},
+{t:"Operators",items:[
+["+ - * / % **","Math; / always gives a float"],
+["//","Floor division: 7 // 2 → 3 (no decimals)"],
+["x += 1","Increase (there is NO x++ in Python)"],
+["== != > < >= <=","Comparisons"],
+["and / or / not","Logical operators (words, not && ||)"],
+["value in collection","Membership: \"a\" in \"cat\" → True"],
+["x is None","Identity check — use is for None"],
+["1 < x < 10","Chained comparison ✨"],
+["result = a if cond else b","Ternary expression"],
+["if (n := len(data)) > 5:","Walrus := — assign inside an expression"]
+]},
+{t:"Strings",items:[
+["f\"Hello {name}, age {age}\"","f-string — embed variables ✓"],
+["f\"{price:.2f}\" / f\"{n:,}\"","Format: 2 decimals / thousands commas"],
+["s[0] / s[-1]","First / last character"],
+["s[1:4] / s[:3] / s[::-1]","Slice / first 3 / reversed ✨"],
+["len(s)","Length"],
+["s.upper() / s.lower() / s.title()","Change case"],
+["s.strip()","Remove spaces at both ends"],
+["s.replace(\"a\", \"b\")","Swap all occurrences"],
+["s.split(\",\") / \"-\".join(lst)","String → list / list → string"],
+["s.startswith(\"He\") / s.endswith(\"lo\")","Prefix / suffix checks"],
+["s.find(\"a\") / s.count(\"a\")","Position (−1 if none) / occurrences"],
+["s.isdigit() / s.isalpha()","All digits? / all letters?"],
+["r\"C:\\new\\file\"","Raw string — backslashes stay literal"],
+["Strings are immutable","Methods return NEW strings"]
+]},
+{t:"Lists",items:[
+["nums = [1, 2, 3]","Create a list (ordered, changeable)"],
+["nums[0] / nums[-1] / nums[1:3]","Access & slice like strings"],
+["nums.append(4)","Add to the end"],
+["nums.insert(1, \"x\")","Insert at position 1"],
+["nums.extend([5, 6]) or nums + [5, 6]","Merge lists"],
+["nums.remove(2)","Delete first matching VALUE"],
+["nums.pop() / nums.pop(0)","Remove & return last / by INDEX"],
+["nums.sort() / nums.sort(reverse=True)","Sort in place, ascending / descending"],
+["sorted(nums)","Sorted COPY (original untouched) ✓"],
+["sorted(words, key=len)","Sort by a rule (here: by length)"],
+["nums.reverse() / nums[::-1]","Reverse in place / reversed copy"],
+["len(nums) / sum(nums) / min(nums) / max(nums)","Count / total / smallest / largest"],
+["3 in nums / nums.index(3) / nums.count(3)","Exists? / position / occurrences"],
+["copy = nums[:]  or  nums.copy()","Shallow copy (avoid b = a — same list!)"]
+]},
+{t:"Tuples & Sets",items:[
+["point = (3, 5)","Tuple — like a list but IMMUTABLE"],
+["x, y = point","Unpack a tuple into variables"],
+["single = (1,)","One-item tuple needs the comma"],
+["s = {1, 2, 2, 3}","Set — unique values only → {1, 2, 3}"],
+["s.add(4) / s.remove(2) / s.discard(9)","Add / remove (error if missing) / remove safely"],
+["a | b / a & b / a - b","Union / intersection / difference"],
+["set(my_list)","Remove duplicates from a list ✨"],
+["frozenset({1, 2})","Immutable set"]
+]},
+{t:"Dictionaries",items:[
+["user = {\"name\": \"Ram\", \"age\": 25}","Key: value pairs"],
+["user[\"name\"]","Read (KeyError if missing)"],
+["user.get(\"city\", \"NA\")","Read safely with a default ✓"],
+["user[\"city\"] = \"Chennai\"","Add or update"],
+["del user[\"age\"] / user.pop(\"age\")","Remove key / remove & return value"],
+["\"name\" in user","Does the key exist?"],
+["user.keys() / user.values() / user.items()","All keys / values / (key, value) pairs"],
+["for k, v in user.items():","Loop through pairs ✓"],
+["merged = d1 | d2","Merge dicts (later keys win)"],
+["user.setdefault(\"score\", 0)","Read; create with default if missing"],
+["{k: v * 2 for k, v in d.items()}","Dict comprehension"]
+]},
+{t:"Conditionals",items:[
+["if x > 5:\n    ...","if — note the colon and the indent"],
+["elif x > 2:","Extra condition (else-if)"],
+["else:","Runs when nothing matched"],
+["if not items:","Pythonic empty-check (empty list/str is falsy)"],
+["if 3 <= x <= 7:","Range check in one go"],
+["match cmd:\n    case \"start\": ...\n    case _: ...","match-case (like switch, Python 3.10+)"]
+]},
+{t:"Loops",items:[
+["for i in range(5):","0, 1, 2, 3, 4"],
+["range(2, 10, 2)","Start 2, stop before 10, step 2 → 2 4 6 8"],
+["for item in my_list:","Loop values directly ✓"],
+["for i, item in enumerate(my_list):","Index AND value together ✓"],
+["for a, b in zip(list1, list2):","Loop two lists in parallel"],
+["while x < 10:","Repeat while condition is true"],
+["break / continue","Exit loop / skip to next round"],
+["for ... else:","else runs only if loop finished WITHOUT break"],
+["for row in grid:\n    for cell in row:","Nested loops"]
+]},
+{t:"Functions",items:[
+["def greet(name):\n    return f\"Hi {name}\"","Define & return"],
+["def f(a, b=10):","Default parameter value"],
+["f(b=5, a=1)","Keyword arguments — any order"],
+["def f(*args):","Collect extra positional args as a tuple"],
+["def f(**kwargs):","Collect extra keyword args as a dict"],
+["f(*my_list) / f(**my_dict)","Unpack a collection INTO arguments"],
+["square = lambda x: x * x","Tiny one-line anonymous function"],
+["def f(x: int) -> str:","Type hints (documentation, not enforced)"],
+["\"\"\"What this does\"\"\"","Docstring — first line inside a function"],
+["global x / nonlocal x","Modify an outer variable (use sparingly)"]
+]},
+{t:"Comprehensions & Built-ins",items:[
+["[x * 2 for x in nums]","List comprehension — transform ✓"],
+["[x for x in nums if x > 2]","With a filter"],
+["[\"even\" if x%2==0 else \"odd\" for x in nums]","With if/else per item"],
+["{x * 2 for x in nums} / (x*2 for x in nums)","Set comprehension / generator (lazy)"],
+["map(func, nums) / filter(func, nums)","Apply / keep matching (wrap in list())"],
+["any(x > 5 for x in nums) / all(…)","At least one true / all true"],
+["sum() min() max() len() round() abs()","The everyday math built-ins"],
+["reversed(nums) / sorted(nums)","Reverse / sort — both return new"],
+["print(*nums)","Unpack when printing: 1 2 3"]
+]},
+{t:"Classes & OOP",items:[
+["class Person:\n    def __init__(self, name):\n        self.name = name","Blueprint; __init__ runs on creation"],
+["p = Person(\"Ram\")","Create an instance (no new keyword)"],
+["def greet(self):","Method — self = the current object (like this)"],
+["class Student(Person):","Inheritance"],
+["super().__init__(name)","Call the parent's constructor"],
+["def __str__(self):","What print(obj) shows"],
+["def __repr__(self) / __len__ / __eq__","Dunder methods customize behavior"],
+["count = 0  (at class level)","Class attribute — shared by all instances"],
+["@property\ndef full(self):","Method used like an attribute: p.full"],
+["@staticmethod / @classmethod","No self / receives the class (cls)"],
+["self._hint / self.__hidden","Convention private / name-mangled private"]
+]},
+{t:"Errors & Files",items:[
+["try:\n    ...\nexcept ValueError as e:\n    ...","Catch a specific error"],
+["except (TypeError, KeyError):","Catch several types"],
+["else: / finally:","Runs if NO error / runs always"],
+["raise ValueError(\"Bad input\")","Throw your own error"],
+["class MyError(Exception): pass","Custom exception"],
+["with open(\"f.txt\") as f:\n    text = f.read()","Read a file — auto-closes ✓"],
+["with open(\"f.txt\", \"w\") as f:\n    f.write(\"hi\")","Write (w = overwrite, a = append)"],
+["for line in f:","Loop a file line by line (memory-friendly)"],
+["import json → json.load(f) / json.dump(data, f)","Read / write JSON files"],
+["json.loads(s) / json.dumps(obj, indent=2)","JSON string ↔ Python object"]
+]},
+{t:"Modules & Standard Library",items:[
+["import math","Use as math.sqrt(16)"],
+["from math import sqrt, pi","Import specific names"],
+["import numpy as np","Rename on import"],
+["math: sqrt, floor, ceil, pi","Math helpers"],
+["random: randint(1,10), choice(lst), shuffle(lst)","Randomness"],
+["datetime: datetime.now(), timedelta(days=7)","Dates & times"],
+["os / pathlib: Path(\"f.txt\").exists()","Files & folders"],
+["collections: Counter, defaultdict","Count things / dict with auto-default"],
+["itertools: product, combinations","Looping power tools"],
+["pip install requests","Install third-party packages (terminal)"],
+["if __name__ == \"__main__\":","Run this only when file is executed directly"]
+]},
+{t:"Advanced",items:[
+["def gen():\n    yield 1\n    yield 2","Generator — pauses at each yield (lazy)"],
+["next(g) / for v in gen():","Pull values one by one / loop them all"],
+["squares = (x*x for x in range(10**9))","Generator expression — huge data, tiny memory"],
+["@my_decorator\ndef f(): ...","Decorator — wraps a function with extra behavior"],
+["def deco(fn):\n    def wrapper(*a, **k):\n        return fn(*a, **k)\n    return wrapper","Decorator skeleton"],
+["first, *rest = [1, 2, 3, 4]","Star unpacking (rest = [2, 3, 4])"],
+["a = b or \"default\"","Fallback value if b is falsy"],
+["from functools import lru_cache → @lru_cache","Auto-memoize a function"],
+["python -m venv env","Virtual environment (isolate packages)"],
+["assert x > 0, \"must be positive\"","Sanity check while developing"],
+["EAFP: try it, catch the error","Pythonic style — vs checking everything first"]
+]}
+]}
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.2/babel.min.js" crossorigin></script>
+
+<script type="text/babel" data-type="module">
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+/* ============================================================
+   1. CONSTANTS
+   ============================================================ */
+const LANGS = [
+  { id:"html",   name:"HTML",       tag:"</>",  mode:"web" },
+  { id:"css",    name:"CSS",        tag:"{ }",  mode:"web" },
+  { id:"js",     name:"JavaScript", tag:"( )",  mode:"js"  },
+  { id:"python", name:"Python",     tag:">>>",  mode:"py"  },
+];
+
+const LEDE = {
+  html:   "Structure the page. Tags, attributes, forms and semantics — the skeleton every site is built on.",
+  css:    "Style the page. Selectors, the box model, flexbox, grid, and animation that makes it feel alive.",
+  js:     "Make it think. Logic, the DOM, events, async and everything that turns a page into an app.",
+  python: "Think in code. Clean syntax for scripts, data, automation and backends — readable by design.",
+};
+
+const SAMPLES = {
+  js: `// Press Run (or Ctrl+Enter)\nconst nums = [1, 2, 3, 4, 5];\n\nconsole.log("Doubled:", nums.map(n => n * 2));\nconsole.log("Evens:", nums.filter(n => n % 2 === 0));\nconsole.log("Total:", nums.reduce((s, n) => s + n, 0));`,
+  py: `# Press Run (or Ctrl+Enter)\nnums = [1, 2, 3, 4, 5]\n\nprint("Doubled:", [n * 2 for n in nums])\nprint("Evens:", [n for n in nums if n % 2 == 0])\nprint("Total:", sum(nums))`,
+  web: `<style>\n  body { font-family: system-ui; display: grid; place-items: center; height: 92vh; margin: 0;\n         background: #0d1117; }\n  .card {\n    padding: 26px 36px; border-radius: 18px; color: #fff; text-align: center;\n    background: linear-gradient(135deg, #7c5cff, #ff5ca8);\n    box-shadow: 0 18px 44px rgba(124,92,255,.4);\n    animation: float 3s ease-in-out infinite;\n  }\n  @keyframes float { 50% { transform: translateY(-12px) } }\n</style>\n\n<div class="card">\n  <h2>Edit me, then Run 🎨</h2>\n  <p>HTML + CSS render live here.</p>\n</div>`,
+};
+
+const STORE_KEY = "codexdeck.progress.v1";
+const loadProgress = () => { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { return {}; } };
+const saveProgress = p => { try { localStorage.setItem(STORE_KEY, JSON.stringify(p)); } catch {} };
+
+/* ============================================================
+   2. SMALL HOOKS
+   ============================================================ */
+function useCountUp(target, ms = 700){
+  const [n, setN] = useState(target);
+  const from = useRef(target);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setN(target); return; }
+    const start = performance.now(), a = from.current, b = target;
+    let raf;
+    const tick = t => {
+      const p = Math.min(1, (t - start) / ms);
+      setN(Math.round(a + (b - a) * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(tick); else from.current = b;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, ms]);
+  return n;
+}
+
+function useTypedTitle(text){
+  const [shown, setShown] = useState(text);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setShown(text); return; }
+    setShown("");
+    let i = 0;
+    const id = setInterval(() => {
+      i++; setShown(text.slice(0, i));
+      if (i >= text.length) clearInterval(id);
+    }, 55);
+    return () => clearInterval(id);
+  }, [text]);
+  return shown;
+}
+
+/* ============================================================
+   3. VISUAL COMPONENTS
+   ============================================================ */
+function ProgressRing({ done, total }){
+  const pct = total ? done / total : 0;
+  const shown = useCountUp(Math.round(pct * 100));
+  const R = 62, C = 2 * Math.PI * R;
+  return (
+    <div className="ring-wrap">
+      <svg width="150" height="150" viewBox="0 0 150 150" aria-hidden="true">
+        <circle className="ring-track" cx="75" cy="75" r={R} fill="none" strokeWidth="9"/>
+        <circle className="ring-arc" cx="75" cy="75" r={R} fill="none" strokeWidth="9"
+          stroke="var(--a)" strokeLinecap="round"
+          strokeDasharray={C} strokeDashoffset={C * (1 - pct)}
+          transform="rotate(-90 75 75)"/>
+      </svg>
+      <div className="ring-center">
+        <div>
+          <div className="big">{shown}%</div>
+          <div className="small">{done} / {total}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Stat({ n, label }){
+  const v = useCountUp(n);
+  return <div className="stat"><div className="n">{v}</div><div className="l">{label}</div></div>;
+}
+
+function Highlight({ text, q }){
+  if (!q) return <>{text}</>;
+  const i = text.toLowerCase().indexOf(q);
+  if (i < 0) return <>{text}</>;
+  return <>{text.slice(0, i)}<mark>{text.slice(i, i + q.length)}</mark>{text.slice(i + q.length)}</>;
+}
+
+/* ============================================================
+   4. CARD + SECTION
+   ============================================================ */
+function Card({ syntax, desc, q, index, done, onToggle, onCopy, onSend }){
+  const [flash, setFlash] = useState(false);
+  const fire = () => { setFlash(true); setTimeout(() => setFlash(false), 560); };
+  return (
+    <div className={"card" + (done ? " done" : "") + (flash ? " flash" : "")}
+         style={{ animationDelay: Math.min(index * 22, 320) + "ms" }}>
+      <span className="pop"></span>
+      <code><Highlight text={syntax} q={q}/></code>
+      <span className="txt"><Highlight text={desc} q={q}/></span>
+      <div className="tools">
+        <button className="tbtn" title="Send to playground" onClick={() => { onSend(syntax); fire(); }}>run</button>
+        <button className="tbtn" title="Copy syntax" onClick={() => { onCopy(syntax); fire(); }}>copy</button>
+        <button className={"tbtn" + (done ? " on" : "")} title="Mark as learned"
+                aria-pressed={done} onClick={onToggle}>{done ? "✓ learned" : "learn"}</button>
+      </div>
+    </div>
+  );
+}
+
+function Section({ sec, idx, q, open, onToggle, progress, mark, onCopy, onSend, langId }){
+  const items = useMemo(() => {
+    if (!q) return sec.items.map((it, i) => ({ it, i }));
+    const titleHit = sec.t.toLowerCase().includes(q);
+    return sec.items.map((it, i) => ({ it, i }))
+      .filter(({ it }) => titleHit || it[0].toLowerCase().includes(q) || it[1].toLowerCase().includes(q));
+  }, [sec, q]);
+
+  const doneCount = sec.items.reduce((n, _, i) => n + (progress[langId + ":" + idx + ":" + i] ? 1 : 0), 0);
+  const pct = Math.round((doneCount / sec.items.length) * 100);
+  if (q && items.length === 0) return null;
+
+  return (
+    <section className={"sec" + (open ? " open" : "")} id={"s" + idx}
+             style={{ animationDelay: Math.min(idx * 35, 400) + "ms" }}>
+      <button className="sec-head" onClick={onToggle} aria-expanded={open}>
+        <span className="sec-num">{String(idx + 1).padStart(2, "0")}</span>
+        <span className="sec-name">{sec.t}</span>
+        <span className="mini-bar" title={pct + "% learned"}>
+          <span className="mini-fill" style={{ width: pct + "%" }}></span>
+        </span>
+        <span className="sec-n">{q ? items.length + "/" : ""}{sec.items.length}</span>
+        <span className="caret">▾</span>
+      </button>
+      <div className="sec-body">
+        <div className="sec-inner">
+          <div className="cards">
+            {open && items.map(({ it, i }, n) => {
+              const key = langId + ":" + idx + ":" + i;
+              return <Card key={key} syntax={it[0]} desc={it[1]} q={q} index={n}
+                           done={!!progress[key]} onToggle={() => mark(key)}
+                           onCopy={onCopy} onSend={onSend}/>;
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   5. PLAYGROUND
+   ============================================================ */
+function Playground({ up, onClose, mode, setMode, injectRef, onToast }){
+  const [code, setCode] = useState(SAMPLES[mode]);
+  const [lines, setLines] = useState([]);
+  const [busy, setBusy] = useState(false);
+  const [srcDoc, setSrcDoc] = useState("");
+  const buffers = useRef({ ...SAMPLES });
+  const edRef = useRef(null);
+  const outRef = useRef(null);
+  const pyRef = useRef(null);
+  const pyLoad = useRef(null);
+
+  const push = useCallback((text, cls) => {
+    setLines(l => [...l.slice(-300), { text, cls, id: Math.random().toString(36).slice(2) }]);
+  }, []);
+
+  useEffect(() => { if (outRef.current) outRef.current.scrollTop = outRef.current.scrollHeight; }, [lines]);
+
+  // keep a live ref of the editor text so buffer swaps never lose work
+  const codeRef = useRef(code);
+  useEffect(() => { codeRef.current = code; }, [code]);
+
+  // whenever the mode changes — from these tabs OR from outside — swap buffers
+  const lastMode = useRef(mode);
+  useEffect(() => {
+    if (lastMode.current === mode) return;
+    buffers.current[lastMode.current] = codeRef.current;
+    setCode(buffers.current[mode]);
+    lastMode.current = mode;
+  }, [mode]);
+
+  const switchMode = m => setMode(m);
+
+  // let the outside world drop a snippet into the editor
+  injectRef.current = (snippet, wantMode) => {
+    buffers.current[mode] = codeRef.current;
+    const target = wantMode || mode;
+    const base = (target === mode ? codeRef.current : buffers.current[target]) || "";
+    const next = (base.trimEnd() ? base.trimEnd() + "\n" : "") + snippet + "\n";
+    buffers.current[target] = next;
+    if (target === mode) { setCode(next); lastMode.current = target; }
+    else setMode(target);   // the sync effect loads buffers.current[target]
+    setTimeout(() => {
+      const el = edRef.current;
+      if (el) { el.focus(); el.selectionStart = el.selectionEnd = el.value.length; el.scrollTop = el.scrollHeight; }
+    }, 60);
+  };
+
+  const fmt = v => {
+    if (typeof v === "string") return v;
+    if (typeof v === "function") return String(v);
+    try { return JSON.stringify(v) ?? String(v); } catch { return String(v); }
+  };
+
+  const runJS = src => {
+    const orig = { log: console.log, warn: console.warn, error: console.error, info: console.info };
+    const hook = cls => (...a) => { push(a.map(fmt).join(" "), cls); orig.log(...a); };
+    console.log = hook(); console.info = hook(); console.warn = hook(); console.error = hook("e");
+    try {
+      const out = new Function(src)();
+      if (out !== undefined) push("→ " + fmt(out), "r");
+    } catch (err) { push("✗ " + err, "e"); }
+    finally { Object.assign(console, orig); }
+  };
+
+  const loadScript = src => new Promise((res, rej) => {
+    const s = document.createElement("script");
+    s.src = src; s.onload = res; s.onerror = () => rej(new Error("Could not load " + src));
+    document.head.appendChild(s);
+  });
+
+  const ensurePy = () => {
+    if (pyRef.current) return Promise.resolve(pyRef.current);
+    if (!pyLoad.current) {
+      push("Booting Python runtime… first run only (~10 MB, needs internet)", "d");
+      pyLoad.current = loadScript("https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js")
+        .then(() => loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/" }))
+        .then(py => { pyRef.current = py; push("Python ready ✓", "d"); return py; })
+        .catch(e => {
+          pyLoad.current = null;
+          push("Python runtime unavailable — check your connection, then press Run again.", "d");
+          throw e;
+        });
+    }
+    return pyLoad.current;
+  };
+
+  const runPy = async src => {
+    setBusy(true);
+    try {
+      const py = await ensurePy();
+      py.setStdout({ batched: s => push(s) });
+      py.setStderr({ batched: s => push(s, "e") });
+      const out = await py.runPythonAsync(src);
+      if (out !== undefined && out !== null) push("→ " + String(out), "r");
+    } catch (e) {
+      const msg = String(e && e.message ? e.message : e).trim().split("\n");
+      push("✗ " + msg.slice(-3).join("\n"), "e");
+    } finally { setBusy(false); }
+  };
+
+  const run = () => {
+    buffers.current[mode] = codeRef.current;
+    if (mode === "web") { setSrcDoc(code); return; }
+    push("── run " + new Date().toLocaleTimeString() + " ──", "d");
+    mode === "js" ? runJS(code) : runPy(code);
+  };
+
+  const onKey = e => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const el = e.target, s = el.selectionStart, en = el.selectionEnd;
+      const next = code.slice(0, s) + "    " + code.slice(en);
+      setCode(next);
+      setTimeout(() => { el.selectionStart = el.selectionEnd = s + 4; }, 0);
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); run(); }
+  };
+
+  return (
+    <section className={"pgwrap" + (up ? " up" : "")} aria-label="Code playground">
+      <div className="pgbar">
+        <span className="pgtag">Playground</span>
+        {[["js","JavaScript"],["py","Python"],["web","HTML + CSS"]].map(([m, label]) =>
+          <button key={m} className={"pgt" + (mode === m ? " on" : "")}
+                  onClick={() => switchMode(m)}>{label}</button>)}
+        <span className="grow"></span>
+        <button className="pgt" onClick={() => { buffers.current[mode] = SAMPLES[mode]; setCode(SAMPLES[mode]); }}>reset code</button>
+        <button className="pgt" onClick={() => { setLines([]); setSrcDoc(""); }}>clear output</button>
+        <button className="run" onClick={run} disabled={busy}>
+          {busy ? <><span className="spin"></span> running</> : <>▶ Run <small>Ctrl+↵</small></>}
+        </button>
+        <button className="pgt" onClick={onClose} aria-label="Close playground">✕</button>
+      </div>
+      <div className="pgbody">
+        <textarea ref={edRef} className="ed" spellCheck="false" value={code}
+                  onChange={e => setCode(e.target.value)} onKeyDown={onKey} aria-label="Code editor"/>
+        <div className="outwrap">
+          {mode === "web"
+            ? <iframe className="frame" title="Live preview" sandbox="allow-scripts" srcDoc={srcDoc}/>
+            : <div className="out" ref={outRef} aria-live="polite">
+                {lines.length === 0
+                  ? <div className="empty">Output appears here — press ▶ Run</div>
+                  : lines.map(l => <div key={l.id} className={"ln " + (l.cls || "")}>{l.text}</div>)}
+              </div>}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   6. APP
+   ============================================================ */
+function App(){
+  const [lang, setLang] = useState("html");
+  const [q, setQ] = useState("");
+  const [openSecs, setOpenSecs] = useState({ 0: true });
+  const [progress, setProgress] = useState(loadProgress);
+  const [pgUp, setPgUp] = useState(false);
+  const [pgMode, setPgMode] = useState("js");
+  const [toast, setToast] = useState("");
+  const injectRef = useRef(() => {});
+  const searchRef = useRef(null);
+  const toastTimer = useRef(null);
+
+  const data = DATA[lang];
+  const langMeta = LANGS.find(l => l.id === lang);
+  const query = q.trim().toLowerCase();
+  const typed = useTypedTitle(data.word);
+
+  useEffect(() => { document.body.dataset.lang = lang; }, [lang]);
+  useEffect(() => { saveProgress(progress); }, [progress]);
+
+  const showToast = msg => {
+    setToast(msg);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(""), 1600);
+  };
+
+  /* stats */
+  const totals = useMemo(() => {
+    const all = {};
+    Object.keys(DATA).forEach(k => {
+      const total = DATA[k].sections.reduce((n, s) => n + s.items.length, 0);
+      let done = 0;
+      DATA[k].sections.forEach((s, si) => s.items.forEach((_, ii) => {
+        if (progress[k + ":" + si + ":" + ii]) done++;
+      }));
+      all[k] = { total, done };
+    });
+    return all;
+  }, [progress]);
+
+  const hits = useMemo(() => {
+    if (!query) return null;
+    let n = 0;
+    data.sections.forEach(s => {
+      const titleHit = s.t.toLowerCase().includes(query);
+      s.items.forEach(it => {
+        if (titleHit || it[0].toLowerCase().includes(query) || it[1].toLowerCase().includes(query)) n++;
+      });
+    });
+    return n;
+  }, [query, data]);
+
+  /* when searching, open every section that still has matches */
+  useEffect(() => {
+    if (query) {
+      const next = {};
+      data.sections.forEach((s, i) => { next[i] = true; });
+      setOpenSecs(next);
+    }
+  }, [query, lang, data]);
+
+  const changeLang = id => {
+    setLang(id);
+    setOpenSecs({ 0: true });
+    const m = LANGS.find(l => l.id === id).mode;
+    if (pgUp) setPgMode(m);
+  };
+
+  const copy = text => {
+    const done = () => showToast("Copied to clipboard");
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(done);
+    } else done();
+  };
+
+  const sendToPlayground = snippet => {
+    setPgUp(true);
+    const target = langMeta.mode;
+    setTimeout(() => injectRef.current(snippet, target), 30);
+    showToast("Added to playground ▸ press Run");
+  };
+
+  const mark = key => setProgress(p => {
+    const next = { ...p };
+    if (next[key]) delete next[key]; else next[key] = 1;
+    return next;
+  });
+
+  /* keyboard shortcuts */
+  useEffect(() => {
+    const onKey = e => {
+      const typing = ["INPUT","TEXTAREA"].includes(document.activeElement.tagName);
+      if (e.key === "/" && !typing) { e.preventDefault(); searchRef.current?.focus(); }
+      if (e.key === "Escape") {
+        if (document.activeElement === searchRef.current) { setQ(""); searchRef.current.blur(); }
+        else if (pgUp && !typing) setPgUp(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [pgUp]);
+
+  const cur = totals[lang];
+  const grand = Object.values(totals).reduce((a, t) => ({ done: a.done + t.done, total: a.total + t.total }), { done:0, total:0 });
+
+  return (
+    <>
+      <div className="shell">
+        {/* ---------------- sidebar ---------------- */}
+        <aside className="side">
+          <div className="brand">
+            <span className="mark">{langMeta.tag}</span>
+            <h1>Codex Deck<span>Interactive reference</span></h1>
+          </div>
+
+          <nav className="panel langs" aria-label="Language">
+            <span className="slider" style={{ transform: "translateY(" + LANGS.findIndex(l => l.id === lang) * 44 + "px)" }}></span>
+            {LANGS.map(l => {
+              const t = totals[l.id];
+              return (
+                <button key={l.id} className={"lang-btn" + (lang === l.id ? " on" : "")}
+                        onClick={() => changeLang(l.id)} aria-current={lang === l.id}>
+                  <span className="tag">{l.tag}</span>{l.name}
+                  <span className="pct">{Math.round((t.done / t.total) * 100)}%</span>
+                </button>
+              );
+            })}
+          </nav>
+
+          <div className="panel rings">
+            <span className="ring-label">{langMeta.name} mastery</span>
+            <ProgressRing done={cur.done} total={cur.total}/>
+          </div>
+
+          <div className="panel stats">
+            <Stat n={data.sections.length} label="sections"/>
+            <Stat n={cur.total} label="entries"/>
+            <Stat n={grand.done} label="learned"/>
+            <Stat n={grand.total} label="all cards"/>
+          </div>
+
+          <p className="side-note">
+            Mark cards <b>learned</b> to fill the ring. Progress is saved in this browser.{" "}
+            <button className="reset-link" onClick={() => { if (confirm("Clear all learned marks?")) setProgress({}); }}>reset progress</button>
+          </p>
+        </aside>
+
+        {/* ---------------- main ---------------- */}
+        <main>
+          <header className="head">
+            <div className="eyebrow">MDN + Python reference · 636 entries</div>
+            <h2 className="title">Learn <em>{typed}</em><span className="cursor"></span></h2>
+            <p className="lede">{LEDE[lang]}</p>
+          </header>
+
+          <div className="bar">
+            <label className="find">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="2.4" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>
+              </svg>
+              <input ref={searchRef} type="search" value={q} onChange={e => setQ(e.target.value)}
+                     placeholder="Search syntax or description…" aria-label="Search"/>
+              <kbd>/</kbd>
+            </label>
+            <button className="btn" onClick={() => {
+              const all = {}; data.sections.forEach((_, i) => all[i] = true); setOpenSecs(all);
+            }}>expand all</button>
+            <button className="btn" onClick={() => setOpenSecs({})}>collapse all</button>
+          </div>
+
+          <div className="hits">
+            {query ? hits + " result" + (hits === 1 ? "" : "s") + " for “" + q.trim() + "”" : ""}
+          </div>
+
+          {query && hits === 0
+            ? <div className="void">Nothing matches <b>{q.trim()}</b> — try a shorter keyword.</div>
+            : data.sections.map((sec, i) => (
+                <Section key={lang + i} sec={sec} idx={i} q={query} langId={lang}
+                         open={!!openSecs[i]} progress={progress} mark={mark}
+                         onToggle={() => setOpenSecs(o => ({ ...o, [i]: !o[i] }))}
+                         onCopy={copy} onSend={sendToPlayground}/>
+              ))}
+        </main>
+      </div>
+
+      {!pgUp && <button className="dock" onClick={() => { setPgMode(langMeta.mode); setPgUp(true); }}>▶ Playground</button>}
+      <Playground up={pgUp} onClose={() => setPgUp(false)} mode={pgMode} setMode={setPgMode}
+                  injectRef={injectRef} onToast={showToast}/>
+      <div className={"toast" + (toast ? " up" : "")}>{toast || " "}</div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

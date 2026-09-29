@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Front-End Sheet — HTML · CSS · JavaScript Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#101319;
+    --bg-soft:#151923;
+    --panel:#1B2029;
+    --panel-2:#20262f;
+    --line:#2A313D;
+    --text:#E9ECF2;
+    --muted:#9AA3B5;
+    --faint:#6B7488;
+    --radius:14px;
+    --font-display:"Archivo",system-ui,sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  body[data-lang="html"]{ --accent:#FF6B3D; --accent-soft:rgba(255,107,61,.14); --accent-line:rgba(255,107,61,.4); --accent-ink:#2b1206; }
+  body[data-lang="css"]{ --accent:#4DA3FF; --accent-soft:rgba(77,163,255,.14); --accent-line:rgba(77,163,255,.4); --accent-ink:#04182e; }
+  body[data-lang="js"]{ --accent:#FFD94D; --accent-soft:rgba(255,217,77,.13); --accent-line:rgba(255,217,77,.4); --accent-ink:#2b2204; }
+  body[data-lang="python"]{ --accent:#4ADE80; --accent-soft:rgba(74,222,128,.13); --accent-line:rgba(74,222,128,.4); --accent-ink:#052012; }
+
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-display);
+    line-height:1.55;
+    min-height:100vh;
+    transition:background .3s;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(900px 420px at 85% -10%, var(--accent-soft), transparent 65%),
+      radial-gradient(700px 380px at -10% 20%, rgba(255,255,255,.03), transparent 60%);
+    transition:background .5s;
+  }
+  .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 20px 90px}
+
+  /* ---------- header ---------- */
+  header{padding:52px 0 10px}
+  .eyebrow{
+    font-family:var(--font-mono);font-size:.72rem;letter-spacing:.22em;
+    color:var(--accent);text-transform:uppercase;display:flex;align-items:center;gap:10px;
+    transition:color .3s;
+  }
+  .eyebrow::after{content:"";height:1px;width:64px;background:var(--accent-line);transition:background .3s}
+  h1{
+    font-size:clamp(2.1rem,5.4vw,3.6rem);font-weight:900;letter-spacing:-.02em;
+    line-height:1.04;margin:14px 0 12px;
+  }
+  h1 .lang-word{color:var(--accent);transition:color .3s;white-space:nowrap}
+  .sub{color:var(--muted);max-width:560px;font-size:.98rem}
+
+  /* ---------- language switcher ---------- */
+  .switcher{
+    display:flex;gap:8px;margin:30px 0 14px;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:999px;padding:6px;width:max-content;max-width:100%;
+  }
+  .switch-btn{
+    appearance:none;border:0;background:transparent;color:var(--muted);
+    font-family:var(--font-display);font-weight:700;font-size:.92rem;
+    padding:9px 18px;border-radius:999px;cursor:pointer;
+    display:flex;align-items:center;gap:9px;
+    transition:background .25s,color .25s;
+  }
+  .switch-btn .brk{font-family:var(--font-mono);font-weight:600;font-size:.85rem;opacity:.85}
+  .switch-btn[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+  .switch-btn:not([aria-selected="true"]):hover{color:var(--text);background:var(--panel-2)}
+  .switch-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* ---------- toolbar ---------- */
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+  .search{
+    flex:1;min-width:230px;display:flex;align-items:center;gap:10px;
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:11px 15px;transition:border-color .25s;
+  }
+  .search:focus-within{border-color:var(--accent-line)}
+  .search svg{flex:none;opacity:.55}
+  .search input{
+    flex:1;background:none;border:0;outline:0;color:var(--text);
+    font-family:var(--font-mono);font-size:.9rem;min-width:0;
+  }
+  .search input::placeholder{color:var(--faint)}
+  .search .kbd{
+    font-family:var(--font-mono);font-size:.7rem;color:var(--faint);
+    border:1px solid var(--line);border-radius:6px;padding:2px 7px;flex:none;
+  }
+  .tool-btn{
+    appearance:none;background:var(--panel);border:1px solid var(--line);color:var(--muted);
+    font-family:var(--font-mono);font-size:.75rem;padding:11px 14px;border-radius:var(--radius);
+    cursor:pointer;transition:color .2s,border-color .2s;white-space:nowrap;
+  }
+  .tool-btn:hover{color:var(--text);border-color:var(--accent-line)}
+  .tool-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .result-count{font-family:var(--font-mono);font-size:.75rem;color:var(--accent);min-height:1.1em;margin:2px 2px 12px;transition:color .3s}
+
+  /* ---------- section chips ---------- */
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 14px;scrollbar-width:thin}
+  .chip{
+    flex:none;appearance:none;cursor:pointer;
+    background:var(--bg-soft);border:1px solid var(--line);color:var(--muted);
+    font-family:var(--font-mono);font-size:.72rem;padding:7px 13px;border-radius:999px;
+    transition:color .2s,border-color .2s,background .2s;
+  }
+  .chip:hover{color:var(--text);border-color:var(--accent-line);background:var(--accent-soft)}
+  .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* ---------- sections ---------- */
+  .section{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    margin-bottom:14px;overflow:hidden;scroll-margin-top:16px;
+  }
+  .section.match-hidden{display:none}
+  .sec-head{
+    width:100%;appearance:none;background:none;border:0;color:var(--text);cursor:pointer;
+    display:flex;align-items:center;gap:14px;padding:17px 20px;text-align:left;
+    font-family:var(--font-display);
+  }
+  .sec-head:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .marker{
+    font-family:var(--font-mono);font-weight:600;font-size:.85rem;color:var(--accent);
+    background:var(--accent-soft);border:1px solid var(--accent-line);
+    border-radius:9px;padding:5px 9px;flex:none;letter-spacing:.06em;
+    transition:color .3s,background .3s,border-color .3s;
+  }
+  .sec-title{font-weight:700;font-size:1.04rem;flex:1;letter-spacing:-.01em}
+  .sec-count{font-family:var(--font-mono);font-size:.7rem;color:var(--faint)}
+  .chev{flex:none;transition:transform .25s;color:var(--faint)}
+  .section.open .chev{transform:rotate(180deg)}
+  .sec-body{display:none;padding:4px 14px 16px}
+  .section.open .sec-body{display:block}
+
+  .entries{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:8px}
+  .entry{
+    appearance:none;text-align:left;cursor:copy;
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:11px;
+    padding:11px 13px;display:flex;flex-direction:column;gap:5px;
+    transition:border-color .2s,background .2s;position:relative;
+  }
+  .entry:hover{border-color:var(--accent-line);background:var(--panel-2)}
+  .entry:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .entry.hide{display:none}
+  .entry code{
+    font-family:var(--font-mono);font-size:.82rem;font-weight:500;color:var(--text);
+    white-space:pre-wrap;word-break:break-word;
+  }
+  .entry code mark{background:var(--accent);color:var(--accent-ink);border-radius:3px;padding:0 2px}
+  .entry .desc{font-size:.82rem;color:var(--muted)}
+  .entry .desc mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding:0 2px}
+  .entry::after{
+    content:"copy";position:absolute;top:9px;right:11px;
+    font-family:var(--font-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--faint);opacity:0;transition:opacity .2s;
+  }
+  .entry:hover::after{opacity:1}
+  .entry.copied::after{content:"copied ✓";color:var(--accent);opacity:1}
+
+  .empty{
+    text-align:center;color:var(--muted);padding:60px 20px;display:none;
+    font-family:var(--font-mono);font-size:.85rem;
+  }
+  .empty.show{display:block}
+  .empty b{color:var(--accent)}
+
+  footer{
+    margin-top:40px;color:var(--faint);font-family:var(--font-mono);font-size:.72rem;
+    display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    border-top:1px solid var(--line);padding-top:18px;
+  }
+  footer a{color:var(--muted);text-decoration:none;border-bottom:1px dotted var(--faint)}
+  footer a:hover{color:var(--accent)}
+
+  .toast{
+    position:fixed;bottom:22px;left:50%;transform:translate(-50%,80px);
+    background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.85rem;
+    padding:10px 20px;border-radius:999px;transition:transform .3s;z-index:50;
+    pointer-events:none;
+  }
+  .toast.show{transform:translate(-50%,0)}
+
+  @media (max-width:640px){
+    header{padding-top:36px}
+    .switch-btn{padding:9px 13px;font-size:.85rem}
+    .switch-btn .brk{display:none}
+    .entries{grid-template-columns:1fr}
+    .search .kbd{display:none}
+  }
+  /* ---------- playground ---------- */
+  .pg-toggle{
+    position:fixed;bottom:20px;right:20px;z-index:60;
+    background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;
+    padding:13px 22px;font-weight:800;font-family:var(--font-display);font-size:.9rem;
+    cursor:pointer;display:flex;gap:9px;align-items:center;
+    box-shadow:0 10px 28px rgb(0 0 0 / .45);transition:transform .2s,background .3s;
+  }
+  .pg-toggle:hover{transform:translateY(-2px)}
+  .pg-toggle:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+  body.pg-open .pg-toggle{display:none}
+  .playground{
+    position:fixed;left:0;right:0;bottom:0;z-index:55;
+    background:var(--bg-soft);border-top:1px solid var(--line);
+    transform:translateY(102%);transition:transform .3s;
+    display:flex;flex-direction:column;height:min(48vh,440px);
+    box-shadow:0 -14px 44px rgb(0 0 0 / .5);
+  }
+  .playground.open{transform:none}
+  body.pg-open .wrap{padding-bottom:calc(min(48vh,440px) + 50px)}
+  .pg-bar{
+    display:flex;align-items:center;gap:8px;padding:9px 14px;
+    border-bottom:1px solid var(--line);flex-wrap:wrap;
+  }
+  .pg-label{
+    font-family:var(--font-mono);font-size:.66rem;letter-spacing:.2em;color:var(--accent);
+    text-transform:uppercase;margin-right:4px;transition:color .3s;
+  }
+  .pg-tab{
+    appearance:none;cursor:pointer;background:var(--panel);border:1px solid var(--line);
+    color:var(--muted);font-family:var(--font-mono);font-size:.72rem;
+    padding:7px 13px;border-radius:999px;transition:all .2s;
+  }
+  .pg-tab:hover{color:var(--text)}
+  .pg-tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:600}
+  .pg-tab:focus-visible,.pg-run:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .pg-spacer{flex:1}
+  .pg-run{
+    appearance:none;cursor:pointer;border:0;border-radius:999px;
+    background:var(--accent);color:var(--accent-ink);font-family:var(--font-display);
+    font-weight:800;font-size:.82rem;padding:8px 18px;display:flex;gap:8px;align-items:center;
+    transition:background .3s;
+  }
+  .pg-run .kbd-hint{font-family:var(--font-mono);font-size:.62rem;opacity:.75;font-weight:600}
+  .pg-mini{
+    appearance:none;cursor:pointer;background:none;border:1px solid var(--line);color:var(--muted);
+    font-family:var(--font-mono);font-size:.7rem;padding:7px 12px;border-radius:999px;transition:all .2s;
+  }
+  .pg-mini:hover{color:var(--text);border-color:var(--accent-line)}
+  .pg-body{flex:1;display:grid;grid-template-columns:1fr 1fr;min-height:0}
+  .pg-editor{
+    width:100%;height:100%;resize:none;border:0;outline:0;
+    background:var(--bg);color:var(--text);
+    font-family:var(--font-mono);font-size:.82rem;line-height:1.6;
+    padding:14px 16px;tab-size:4;
+  }
+  .pg-outwrap{position:relative;border-left:1px solid var(--line);min-height:0;background:var(--bg-soft)}
+  .pg-out{
+    position:absolute;inset:0;overflow:auto;padding:12px 15px;
+    font-family:var(--font-mono);font-size:.78rem;line-height:1.6;
+  }
+  .pg-out .line{white-space:pre-wrap;word-break:break-word}
+  .pg-out .err{color:#ff8080}
+  .pg-out .res{color:var(--accent)}
+  .pg-out .dim{color:var(--faint);font-style:italic}
+  .pg-out:empty::before{content:"Output appears here — press ▶ Run";color:var(--faint);font-style:italic}
+  .pg-frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;display:none}
+  .playground.web-mode .pg-frame{display:block}
+  .playground.web-mode .pg-out{display:none}
+  @media (max-width:720px){
+    .pg-body{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+    .pg-outwrap{border-left:0;border-top:1px solid var(--line)}
+    .playground{height:min(70vh,560px)}
+    body.pg-open .wrap{padding-bottom:calc(min(70vh,560px) + 50px)}
+    .pg-run .kbd-hint{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;animation:none !important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body data-lang="html">
+<div class="wrap">
+  <header>
+    <div class="eyebrow">MDN Quick Reference · 2026</div>
+    <h1>The Front-End Sheet<br>for <span class="lang-word" id="langWord">HTML</span></h1>
+    <p class="sub">Every tag, property and method you actually reach for — searchable, collapsible, click-to-copy, and now <b style="color:var(--accent)">runnable</b>. Open the playground to try code live.</p>
+  </header>
+
+  <div class="switcher" role="tablist" aria-label="Language">
+    <button class="switch-btn" role="tab" data-lang="html" aria-selected="true"><span class="brk">&lt;&nbsp;&gt;</span>HTML</button>
+    <button class="switch-btn" role="tab" data-lang="css" aria-selected="false"><span class="brk">{&nbsp;}</span>CSS</button>
+    <button class="switch-btn" role="tab" data-lang="js" aria-selected="false"><span class="brk">(&nbsp;)</span>JavaScript</button>
+    <button class="switch-btn" role="tab" data-lang="python" aria-selected="false"><span class="brk">&gt;&gt;&gt;</span>Python</button>
+  </div>
+
+  <div class="toolbar">
+    <label class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="searchInput" type="search" placeholder="Search syntax or description…" aria-label="Search cheat sheet">
+      <span class="kbd">/</span>
+    </label>
+    <button class="tool-btn" id="expandAll">expand all</button>
+    <button class="tool-btn" id="collapseAll">collapse all</button>
+  </div>
+  <div class="result-count" id="resultCount" aria-live="polite"></div>
+
+  <nav class="chips" id="chips" aria-label="Jump to section"></nav>
+
+  <main id="content"></main>
+  <div class="empty" id="empty">No matches for "<b id="emptyQ"></b> " — try a shorter keyword.</div>
+
+  <footer>
+    <span>Click a card to copy · open ▶ Playground to run code live</span>
+    <a href="https://developer.mozilla.org/en-US/docs/Web" target="_blank" rel="noopener">Full docs → MDN Web Docs</a>
+  </footer>
+</div>
+<button class="pg-toggle" id="pgToggle">▶ Playground</button>
+<section class="playground" id="playground" aria-label="Code playground">
+  <div class="pg-bar">
+    <span class="pg-label">Playground</span>
+    <button class="pg-tab" data-mode="js" aria-selected="true">JavaScript</button>
+    <button class="pg-tab" data-mode="py" aria-selected="false">Python</button>
+    <button class="pg-tab" data-mode="web" aria-selected="false">HTML + CSS</button>
+    <span class="pg-spacer"></span>
+    <button class="pg-mini" id="pgReset">reset code</button>
+    <button class="pg-mini" id="pgClear">clear output</button>
+    <button class="pg-run" id="pgRun">▶ Run <span class="kbd-hint">Ctrl+↵</span></button>
+    <button class="pg-mini" id="pgClose" aria-label="Close playground">✕</button>
+  </div>
+  <div class="pg-body">
+    <textarea class="pg-editor" id="pgEditor" spellcheck="false" aria-label="Code editor"></textarea>
+    <div class="pg-outwrap">
+      <div class="pg-out" id="pgOut" aria-live="polite"></div>
+      <iframe class="pg-frame" id="pgFrame" title="HTML preview" sandbox="allow-scripts"></iframe>
+    </div>
+  </div>
+</section>
+<div class="toast" id="toast">Copied to clipboard</div>
+<script>
+/* ============ DATA ============ */
+const DATA = {
+html: { word:"HTML", brk:"< >", sections:[
+{t:"Document Structure",items:[
+["<!DOCTYPE html>","Declares an HTML5 document (always first line)"],
+["<html lang=\"en\">…</html>","Root element; lang helps screen readers & SEO"],
+["<head>…</head>","Page info: title, meta, links (not visible)"],
+["<title>Page</title>","Browser tab title"],
+["<meta charset=\"UTF-8\">","Character encoding — supports all languages"],
+["<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">","Makes page responsive on mobile"],
+["<meta name=\"description\" content=\"…\">","Page summary for search engines"],
+["<link rel=\"stylesheet\" href=\"style.css\">","Attach an external CSS file"],
+["<link rel=\"icon\" href=\"favicon.ico\">","Browser tab icon"],
+["<script src=\"app.js\" defer><\/script>","Attach JS; defer = run after HTML loads"],
+["<body>…</body>","All visible page content lives here"],
+["<!-- comment -->","Comment — ignored by the browser"]
+]},
+{t:"Text & Headings",items:[
+["<h1>…</h1> to <h6>…</h6>","Headings, biggest to smallest (one h1 per page)"],
+["<p>…</p>","Paragraph of text"],
+["<br>","Line break (no closing tag)"],
+["<hr>","Horizontal divider line"],
+["<strong>…</strong>","Important text (bold + meaning)"],
+["<em>…</em>","Emphasized text (italic + meaning)"],
+["<b>…</b> / <i>…</i>","Bold / italic (visual only, no meaning)"],
+["<u>…</u>","Underlined text"],
+["<mark>…</mark>","Highlighted text"],
+["<small>…</small>","Fine print / side notes"],
+["<del>…</del> / <ins>…</ins>","Deleted (strikethrough) / inserted text"],
+["<sub>…</sub> / <sup>…</sup>","Subscript (H₂O) / superscript (x²)"],
+["<blockquote cite=\"url\">…</blockquote>","Long quoted section"],
+["<q>…</q>","Short inline quote (adds quotation marks)"],
+["<abbr title=\"HyperText…\">HTML</abbr>","Abbreviation — full form shows on hover"],
+["<code>…</code>","Inline code snippet"],
+["<pre>…</pre>","Preserves spaces & line breaks (code blocks)"],
+["<kbd>Ctrl</kbd>","Keyboard key styling"],
+["<address>…</address>","Contact information block"]
+]},
+{t:"Links & Navigation",items:[
+["<a href=\"https://site.com\">Visit</a>","Hyperlink to another page"],
+["<a href=\"page.html\">…</a>","Link to a page in your own site (relative)"],
+["<a href=\"#section-id\">…</a>","Jump to an element on the same page"],
+["<a href=\"…\" target=\"_blank\" rel=\"noopener\">…</a>","Open link in a new tab (safely)"],
+["<a href=\"mailto:hi@x.com\">…</a>","Opens the user's email app"],
+["<a href=\"tel:+9198…\">…</a>","Tap to call on phones"],
+["<a href=\"file.pdf\" download>…</a>","Downloads the file instead of opening"],
+["<nav>…</nav>","Wrapper for main navigation links"]
+]},
+{t:"Images & Media",items:[
+["<img src=\"cat.jpg\" alt=\"A cat\">","Image; alt describes it (accessibility + SEO)"],
+["<img … width=\"400\" height=\"300\">","Set size — prevents layout jumping"],
+["<img … loading=\"lazy\">","Load image only when scrolled into view"],
+["<figure><img …><figcaption>Caption</figcaption></figure>","Image with a caption"],
+["<picture><source srcset=\"big.webp\" media=\"(min-width:800px)\"><img src=\"small.jpg\" alt=\"\"></picture>","Different images for different screens/formats"],
+["<video src=\"clip.mp4\" controls poster=\"thumb.jpg\"></video>","Video player with controls & preview image"],
+["<audio src=\"song.mp3\" controls></audio>","Audio player"],
+["<source src=\"clip.webm\" type=\"video/webm\">","Alternative file formats inside video/audio"],
+["<track src=\"subs.vtt\" kind=\"subtitles\">","Subtitles for video"],
+["<iframe src=\"https://maps…\" title=\"Map\"></iframe>","Embed another page (maps, YouTube)"],
+["<svg>…</svg>","Scalable vector graphics drawn in code"],
+["<canvas id=\"c\"></canvas>","Drawing surface controlled by JavaScript"]
+]},
+{t:"Lists",items:[
+["<ul><li>Item</li></ul>","Unordered (bullet) list"],
+["<ol><li>Step</li></ol>","Ordered (numbered) list"],
+["<ol start=\"5\">…</ol>","Numbering starts at 5"],
+["<ol reversed>…</ol>","Counts downwards"],
+["<ol type=\"A\">…</ol>","A, B, C… (also a, i, I)"],
+["<dl><dt>Term</dt><dd>Definition</dd></dl>","Description list (term + meaning)"],
+["<ul><li>Item<ul><li>Sub</li></ul></li></ul>","Nested list — list inside a list item"]
+]},
+{t:"Tables",items:[
+["<table>…</table>","Table container"],
+["<tr>…</tr>","Table row"],
+["<th>Name</th>","Header cell (bold, centered)"],
+["<td>Ram</td>","Data cell"],
+["<thead> <tbody> <tfoot>","Group header / body / footer rows"],
+["<caption>Sales 2026</caption>","Table title (first child of table)"],
+["<td colspan=\"2\">…</td>","Cell spans 2 columns"],
+["<td rowspan=\"3\">…</td>","Cell spans 3 rows"],
+["<th scope=\"col\">…</th>","Tells screen readers what the header labels"]
+]},
+{t:"Forms & Inputs",items:[
+["<form action=\"/save\" method=\"post\">…</form>","Form; action = where data goes"],
+["<label for=\"em\">Email</label> <input id=\"em\">","Label linked to input (click label = focus input)"],
+["<input type=\"text\">","Single-line text box"],
+["<input type=\"email\"> / type=\"password\"","Email (auto-validated) / hidden characters"],
+["<input type=\"number\" min=\"1\" max=\"10\">","Numbers only, with limits"],
+["<input type=\"checkbox\" checked>","Tick box (checked = on by default)"],
+["<input type=\"radio\" name=\"size\">","Pick ONE option (same name = one group)"],
+["<input type=\"date\"> / \"time\" / \"color\" / \"file\" / \"range\"","Date picker / time / color / file upload / slider"],
+["<input type=\"search\"> / \"url\" / \"tel\" / \"hidden\"","Search box / URL / phone / invisible value"],
+["<textarea rows=\"4\">…</textarea>","Multi-line text box"],
+["<select><option value=\"in\">India</option></select>","Dropdown menu"],
+["<optgroup label=\"Asia\">…</optgroup>","Group options inside a dropdown"],
+["<button type=\"submit\">Send</button>","Submits the form (also: button, reset)"],
+["<fieldset><legend>Address</legend>…</fieldset>","Group related fields with a title"],
+["<datalist id=\"opts\"><option value=\"…\"></datalist>","Autocomplete suggestions for an input"],
+["<progress value=\"70\" max=\"100\"></progress>","Progress bar"],
+["<meter value=\"0.6\"></meter>","Gauge (disk usage, score)"],
+["<output>42</output>","Shows a calculation result"]
+]},
+{t:"Form Attributes",items:[
+["required","Field must be filled before submit"],
+["placeholder=\"Enter name…\"","Grey hint text inside the field"],
+["value=\"default\"","Pre-filled value"],
+["name=\"email\"","Key used when data is sent to server"],
+["disabled","Field is greyed out & unusable"],
+["readonly","Visible & copyable, but not editable"],
+["min / max / step","Limits for numbers, dates, ranges"],
+["maxlength=\"20\"","Maximum characters allowed"],
+["pattern=\"[0-9]{6}\"","Must match this regex (e.g. 6-digit PIN)"],
+["autocomplete=\"email\"","Lets the browser auto-fill"],
+["autofocus","Cursor lands here on page load"],
+["multiple","Allow many files / selections"],
+["selected","Default option in a dropdown"]
+]},
+{t:"Semantic Layout",items:[
+["<header>…</header>","Top of page or section (logo, title, nav)"],
+["<nav>…</nav>","Main navigation links"],
+["<main>…</main>","The unique main content (one per page)"],
+["<section>…</section>","A themed group of content (usually with a heading)"],
+["<article>…</article>","Self-contained piece (blog post, card, comment)"],
+["<aside>…</aside>","Side content (sidebar, related links)"],
+["<footer>…</footer>","Bottom of page or section"],
+["<div>…</div>","Generic block container (no meaning) — last resort"],
+["<span>…</span>","Generic inline container (no meaning)"],
+["<details><summary>More</summary>hidden text</details>","Built-in expand/collapse widget"],
+["<dialog open>…</dialog>","Popup / modal box (control with JS)"],
+["<time datetime=\"2026-07-06\">today</time>","Machine-readable date/time"],
+["<template>…</template>","Hidden HTML to clone later with JS"]
+]},
+{t:"Global Attributes & Entities",items:[
+["id=\"unique-name\"","Unique identifier (one per page)"],
+["class=\"card featured\"","Reusable label(s) for CSS/JS — space separated"],
+["style=\"color:red\"","Inline CSS (avoid — use stylesheets)"],
+["title=\"tooltip text\"","Tooltip on hover"],
+["data-user-id=\"42\"","Custom data attribute (read via JS dataset)"],
+["hidden","Hides the element completely"],
+["contenteditable=\"true\"","User can edit the text directly"],
+["tabindex=\"0\"","Makes element keyboard-focusable"],
+["aria-label=\"Close menu\"","Accessible name for screen readers"],
+["role=\"button\"","Tells assistive tech what the element acts as"],
+["lang=\"ta\"","Language of this element's text"],
+["&amp; &lt; &gt;","Entities for & < > (can't type these raw)"],
+["&nbsp; &copy; &rarr;","Non-breaking space, ©, →"]
+]}
+]},
+css: { word:"CSS", brk:"{ }", sections:[
+{t:"Basics & Applying CSS",items:[
+["selector { property: value; }","The anatomy of every CSS rule"],
+["<link rel=\"stylesheet\" href=\"style.css\">","External stylesheet (best practice)"],
+["<style> p { color:red } </style>","Internal CSS inside <head>"],
+["style=\"color:red\"","Inline CSS on one element (avoid)"],
+["/* comment */","CSS comment"],
+["@import url(\"base.css\");","Load another stylesheet inside CSS"],
+["inherit / initial / unset","Take parent value / default value / auto-decide"],
+["!important","Force a rule to win — use as last resort"]
+]},
+{t:"Selectors",items:[
+["*","Every element"],
+["p","All <p> elements (type selector)"],
+[".card","All elements with class=\"card\""],
+["#logo","The element with id=\"logo\""],
+["h1, h2, p","Group — same rules for several selectors"],
+["div p","Descendant — any <p> inside a <div>"],
+["div > p","Child — <p> directly inside <div>"],
+["h2 + p","Adjacent sibling — <p> right after <h2>"],
+["h2 ~ p","All <p> siblings after <h2>"],
+["[disabled]","Elements having that attribute"],
+["[type=\"email\"]","Attribute equals value"],
+["[href^=\"https\"]","Attribute starts with…"],
+["[href$=\".pdf\"]","Attribute ends with…"],
+["[class*=\"btn\"]","Attribute contains…"]
+]},
+{t:"Pseudo-classes",items:[
+[":hover","Mouse is over the element"],
+[":focus / :focus-visible","Element is focused (visible = keyboard only)"],
+[":active","Being clicked right now"],
+[":visited","Link already visited"],
+[":first-child / :last-child","First / last child of its parent"],
+[":nth-child(3)","The 3rd child"],
+[":nth-child(2n) / :nth-child(odd)","Every even / odd child (zebra stripes)"],
+[":not(.active)","Everything except .active"],
+[":is(h1, h2, h3)","Matches any in the list (shorter selectors)"],
+[":where(h1, h2)","Same as :is but zero specificity"],
+[":has(img)","Parent that contains an image (parent selector!)"],
+[":checked / :disabled / :required","Form states"],
+[":empty","Element with no children"],
+[":root","The <html> element (define variables here)"]
+]},
+{t:"Pseudo-elements",items:[
+["::before { content:\"→\" }","Insert content before element's content"],
+["::after { content:\"\" }","Insert after (decorations, icons, overlays)"],
+["::first-letter","Style just the first letter (drop caps)"],
+["::first-line","Style the first line of text"],
+["::selection","Style highlighted/selected text"],
+["::placeholder","Style input placeholder text"],
+["::marker","Style list bullets/numbers"]
+]},
+{t:"Colors & Units",items:[
+["color: red;","Named color (140+ names)"],
+["#ff5733 / #f53","Hex color (short form = doubled digits)"],
+["rgb(255 87 51)","Red green blue (0–255)"],
+["rgb(255 87 51 / 0.5)","With 50% transparency"],
+["hsl(14 100% 60%)","Hue (0–360°), saturation, lightness — easy to tweak"],
+["transparent / currentColor","Fully clear / same as text color"],
+["px","Fixed pixels"],
+["% ","Relative to parent"],
+["em / rem","Relative to element font size / root font size ✓"],
+["vw / vh","1% of viewport width / height"],
+["vmin / vmax","1% of the smaller / larger viewport side"],
+["ch / fr / deg / s","Character width / grid fraction / degrees / seconds"]
+]},
+{t:"Box Model",items:[
+["width / height","Content size"],
+["min-width / max-width","Size limits (great for responsive)"],
+["padding: 10px 20px;","Inner space — top/bottom 10, left/right 20"],
+["margin: 16px;","Outer space around the element"],
+["margin: 0 auto;","Center a block horizontally"],
+["border: 2px solid black;","Width, style (solid/dashed/dotted), color"],
+["border-radius: 12px;","Rounded corners (50% = circle)"],
+["box-sizing: border-box;","Width includes padding + border ✓ use always"],
+["outline: 2px solid blue;","Ring outside border (focus states; no layout shift)"],
+["box-shadow: 0 4px 12px rgb(0 0 0 / .2);","Drop shadow: x y blur color"],
+["aspect-ratio: 16 / 9;","Lock width-to-height ratio"],
+["overflow: hidden / scroll / auto;","What happens when content is too big"]
+]},
+{t:"Typography",items:[
+["font-family: \"Inter\", sans-serif;","Font + fallback"],
+["font-size: 1.1rem;","Text size"],
+["font-weight: 400 / 700 / bold;","Thickness"],
+["font-style: italic;","Italic text"],
+["line-height: 1.6;","Space between lines (unitless ✓)"],
+["letter-spacing: 0.05em;","Space between letters"],
+["text-align: left / center / right / justify;","Horizontal alignment"],
+["text-decoration: underline / none;","Underline, strike — none removes link underline"],
+["text-transform: uppercase / capitalize;","Change letter case"],
+["text-indent: 2em;","Indent first line"],
+["white-space: nowrap / pre-wrap;","Stop wrapping / keep line breaks"],
+["text-overflow: ellipsis;","Show … for cut text (with overflow:hidden + nowrap)"],
+["word-break: break-word;","Break long words to prevent overflow"],
+["text-shadow: 1px 1px 3px gray;","Shadow behind text"],
+["@font-face { font-family:\"My\"; src:url(my.woff2) }","Load a custom font file"]
+]},
+{t:"Backgrounds & Gradients",items:[
+["background-color: #eee;","Fill color"],
+["background-image: url(\"bg.jpg\");","Background picture"],
+["background-size: cover / contain;","Fill area (crop) / fit fully (no crop)"],
+["background-position: center;","Where the image sits"],
+["background-repeat: no-repeat;","Stop tiling"],
+["background-attachment: fixed;","Image stays while page scrolls (parallax)"],
+["background: url(a.jpg) center/cover no-repeat;","Shorthand"],
+["linear-gradient(to right, red, blue)","Color fade in a direction (or 45deg)"],
+["radial-gradient(circle, red, blue)","Fade from the center outward"],
+["conic-gradient(red, yellow, red)","Fade around a circle (pie charts)"],
+["background: url(a.png), linear-gradient(…);","Multiple layered backgrounds"]
+]},
+{t:"Display, Position & Z-index",items:[
+["display: block;","Full width, starts new line (div, p)"],
+["display: inline;","Flows in text; width/height ignored (span, a)"],
+["display: inline-block;","Flows in text but accepts width/height"],
+["display: none;","Removed completely (vs visibility:hidden = invisible but keeps space)"],
+["display: flex / grid;","Enable flexbox / grid layout"],
+["opacity: 0.5;","50% see-through (still clickable)"],
+["position: static;","Default — normal flow"],
+["position: relative;","Nudge from normal spot; anchor for absolute children"],
+["position: absolute; top:0; right:0;","Pin to nearest positioned ancestor"],
+["position: fixed;","Pin to the screen (stays on scroll)"],
+["position: sticky; top:0;","Scrolls, then sticks (sticky headers)"],
+["z-index: 10;","Stacking order — higher = on top (needs position)"],
+["inset: 0;","Shorthand for top/right/bottom/left: 0"]
+]},
+{t:"Flexbox (1-D layout)",items:[
+["display: flex;","Children line up in a row (on the parent)"],
+["flex-direction: row / column;","Main axis: horizontal / vertical"],
+["justify-content: center;","Align along main axis: flex-start, center, space-between, space-around, space-evenly"],
+["align-items: center;","Align along cross axis: stretch, center, flex-start, flex-end"],
+["flex-wrap: wrap;","Items flow to next line when full"],
+["gap: 16px;","Space between items ✓"],
+["flex-grow: 1;","Item stretches to fill spare space"],
+["flex-shrink: 0;","Item refuses to shrink"],
+["flex-basis: 200px;","Item's starting size"],
+["flex: 1;","Shorthand grow shrink basis"],
+["align-self: flex-end;","Override alignment for ONE item"],
+["order: 2;","Change visual order without moving HTML"],
+["align-content: center;","Align multiple wrapped lines"]
+]},
+{t:"Grid (2-D layout)",items:[
+["display: grid;","Enable grid on the parent"],
+["grid-template-columns: 1fr 2fr 1fr;","3 columns; fr = share of free space"],
+["grid-template-columns: repeat(3, 1fr);","3 equal columns"],
+["repeat(auto-fit, minmax(250px, 1fr))","Responsive columns with NO media queries ✨"],
+["grid-template-rows: 100px auto;","Row heights"],
+["gap: 20px; / row-gap / column-gap","Spacing between cells"],
+["grid-column: 1 / 3;","Item spans column line 1 to 3"],
+["grid-column: span 2;","Item spans 2 columns"],
+["grid-row: span 2;","Item spans 2 rows"],
+["grid-template-areas: \"nav nav\" \"side main\";","Name regions, then place with grid-area"],
+["grid-area: main;","Put item in a named region"],
+["place-items: center;","Center everything (align + justify)"]
+]},
+{t:"Transitions, Animations & Transforms",items:[
+["transition: all 0.3s ease;","Smoothly animate property changes"],
+["transition: transform .2s, opacity .4s;","Different timing per property"],
+["transition-delay: 0.1s;","Wait before starting"],
+["ease / linear / ease-in-out / cubic-bezier(…)","Speed curves"],
+["@keyframes slide { from{left:0} to{left:100px} }","Define animation steps (or 0%, 50%, 100%)"],
+["animation: slide 2s ease infinite;","Run keyframes: name duration timing repeat"],
+["animation-direction: alternate;","Play forward then backward"],
+["animation-fill-mode: forwards;","Keep the final state after ending"],
+["transform: translate(10px, 20px);","Move element (translateX / translateY)"],
+["transform: scale(1.2);","Grow / shrink"],
+["transform: rotate(45deg);","Rotate"],
+["transform: skew(10deg);","Slant"],
+["transform-origin: top left;","Point the transform pivots around"],
+["filter: blur(4px) brightness(1.2);","Visual effects: grayscale, drop-shadow, contrast…"],
+["backdrop-filter: blur(10px);","Frosted-glass effect on what's behind"]
+]},
+{t:"Responsive Design & Media Queries",items:[
+["@media (max-width: 768px) { … }","Rules apply on screens ≤ 768px"],
+["@media (min-width: 1024px) { … }","Rules for screens ≥ 1024px (mobile-first ✓)"],
+["@media (orientation: landscape) { … }","Device is sideways"],
+["@media (prefers-color-scheme: dark) { … }","User's OS is in dark mode"],
+["@media (prefers-reduced-motion: reduce) { … }","User wants less animation — respect it"],
+["@container (min-width: 400px) { … }","React to the PARENT size (container queries)"],
+["font-size: clamp(1rem, 2.5vw, 1.5rem);","Fluid size with min & max — magic ✨"],
+["width: min(90%, 1200px);","Whichever is smaller (responsive containers)"]
+]},
+{t:"Variables & Functions",items:[
+[":root { --brand: #06f; }","Define a custom property (variable)"],
+["color: var(--brand);","Use a variable"],
+["var(--brand, blue)","Fallback if variable is missing"],
+["width: calc(100% - 60px);","Math with mixed units"],
+["clamp(min, preferred, max)","Value locked between limits"],
+["min(a, b) / max(a, b)","Pick the smaller / larger value"],
+["@supports (display: grid) { … }","Apply only if the browser supports it"]
+]},
+{t:"Useful Extras",items:[
+["cursor: pointer;","Hand cursor (buttons, links)"],
+["pointer-events: none;","Element ignores clicks"],
+["user-select: none;","Text cannot be selected"],
+["object-fit: cover;","Crop <img>/<video> to fill its box nicely"],
+["list-style: none;","Remove bullets (then padding:0)"],
+["scroll-behavior: smooth;","Smooth scrolling for anchor jumps"],
+["scroll-snap-type: x mandatory;","Carousel-style snap scrolling"],
+["columns: 3;","Newspaper-style text columns"],
+["float: left; / clear: both;","Old layout method — wrap text around images"],
+["Specificity order","inline style > #id > .class/[attr]/:hover > element — more specific wins"]
+]}
+]},
+js: { word:"JavaScript", brk:"( )", sections:[
+{t:"Basics & Console",items:[
+["console.log(x)","Print to console (debugging)"],
+["console.error(x) / console.warn(x)","Print error / warning"],
+["console.table(arr)","Show array/object as a table"],
+["alert(\"Hi\") / prompt(\"Name?\") / confirm(\"Sure?\")","Popup / ask input / OK-Cancel"],
+["// comment  and  /* block */","Comments"],
+["\"use strict\";","Catch silent errors (auto in modules)"]
+]},
+{t:"Variables & Data Types",items:[
+["const x = 5;","Cannot be reassigned — use by default ✓"],
+["let x = 5;","Can be changed later, block-scoped"],
+["var x = 5;","Old, function-scoped — avoid ✗"],
+["String, Number, BigInt, Boolean, undefined, null, Symbol","The 7 primitive types"],
+["Object, Array, Function","Reference types (stored by reference)"],
+["typeof x","Type as a string (typeof null is \"object\" — famous bug)"],
+["Array.isArray(x)","Correct way to check for an array"],
+["Number(\"12\") / String(99) / Boolean(v)","Convert between types"],
+["parseInt(\"42px\") / parseFloat(\"3.14m\")","Read number from start of a string"],
+["Falsy: 0, \"\", null, undefined, NaN, false","Everything else is truthy (even [] and {})"]
+]},
+{t:"Operators",items:[
+["+ - * / % **","Math: remainder %, power **"],
+["x++ / x--","Increase / decrease by 1"],
+["+= -= *= /=","Shorthand: x += 5 means x = x + 5"],
+["=== / !==","Strict equal / not equal (checks type too) ✓"],
+["== / !=","Loose equal — converts types, avoid ✗"],
+["&& || !","AND / OR / NOT"],
+["cond ? a : b","Ternary: if cond then a else b"],
+["a ?? b","b only if a is null/undefined (keeps 0 and \"\")"],
+["obj?.prop / obj?.method?.()","Optional chaining — safe access, no crash"],
+["x ??= y  |  x ||= y  |  x &&= y","Assign only if nullish / falsy / truthy"]
+]},
+{t:"Conditionals & Loops",items:[
+["if (c) {…} else if (c2) {…} else {…}","Run different code by condition"],
+["switch (v) { case \"a\": …; break; default: … }","Compare one value to many options"],
+["for (let i = 0; i < 5; i++) {…}","Repeat a known number of times"],
+["for (const item of array) {…}","Loop array VALUES ✓"],
+["for (const key in object) {…}","Loop object KEYS"],
+["while (c) {…}  /  do {…} while (c);","Repeat until false / at least once"],
+["break / continue","Exit loop / skip to next round"]
+]},
+{t:"Functions",items:[
+["function greet(name) { return \"Hi \" + name; }","Declaration (hoisted — usable before defined)"],
+["const greet = (name) => \"Hi \" + name;","Arrow function ✓ (no own this)"],
+["const sq = x => x * x;","One param: no ( ); one line: auto-return"],
+["function f(a, b = 10) {…}","Default parameter value"],
+["function sum(...nums) {…}","Rest — collect all arguments into an array"],
+["(() => { … })();","IIFE — runs immediately once"],
+["setTimeout(() => {…}, 1000)","Callback — a function passed to another function"],
+["const add = a => b => a + b;  add(2)(3) → 5","Currying — one argument per call"]
+]},
+{t:"Strings",items:[
+["`Hello ${name}`","Template literal — embed variables ✓"],
+["str.length / str[0] / str.at(-1)","Length / first char / last char"],
+["str.toUpperCase() / toLowerCase()","Change case"],
+["str.trim()","Remove spaces at both ends"],
+["str.includes(\"lo\") / startsWith / endsWith","Contains / starts / ends checks"],
+["str.indexOf(\"a\")","Position of first match (−1 if none)"],
+["str.slice(1, 4)","Cut portion (end index not included)"],
+["str.replace(\"a\",\"b\") / replaceAll(\"a\",\"b\")","Swap first / all occurrences"],
+["str.split(\",\")","String → array: \"a,b\" → [\"a\",\"b\"]"],
+["str.repeat(3) / padStart(5,\"0\")","\"hihihi\" / \"00042\""],
+["Strings are immutable","Methods return NEW strings; original never changes"]
+]},
+{t:"Numbers & Math",items:[
+["num.toFixed(2)","Round to 2 decimals (returns a string)"],
+["Math.round(4.5) / floor(4.9) / ceil(4.1)","Nearest / down / up"],
+["Math.abs(-7) / Math.trunc(4.9)","Positive value / chop decimals"],
+["Math.pow(2,3) / Math.sqrt(16)","Power / square root"],
+["Math.min(...arr) / Math.max(...arr)","Smallest / largest"],
+["Math.random()","Random decimal 0–1"],
+["Math.floor(Math.random() * 10) + 1","Random integer 1–10"],
+["Number.isInteger(x) / Number.isNaN(x)","Safe checks"]
+]},
+{t:"Arrays",items:[
+["arr.push(x) / arr.pop()","Add / remove at END (mutates)"],
+["arr.unshift(x) / arr.shift()","Add / remove at START (mutates)"],
+["arr.splice(1, 2)","Remove 2 items at index 1 (or insert)"],
+["arr.sort((a,b) => a - b)","Sort numbers ascending (b - a = descending)"],
+["arr.includes(3) / arr.indexOf(3)","Exists? / position"],
+["arr.find(x => x > 2) / findIndex(…)","First matching value / its index"],
+["arr.some(fn) / arr.every(fn)","At least one matches / all match"],
+["arr.map(x => x * 2)","NEW array, each item transformed ✓"],
+["arr.filter(x => x > 2)","NEW array, only matching items ✓"],
+["arr.reduce((sum, x) => sum + x, 0)","Combine everything into ONE value ✓"],
+["arr.forEach(x => {…})","Run a function per item (no return)"],
+["arr.slice(1, 3) / [...arr]","Copy a portion / copy the whole array"],
+["arr.concat(b) / arr.join(\"-\") / arr.flat()","Merge / to string / flatten nested"],
+["arr.at(-1) / arr.toSorted() / toReversed()","Last item / sorted COPY / reversed COPY"],
+["[...new Set(arr)]","Remove duplicates ✨"]
+]},
+{t:"Objects",items:[
+["const user = { name: \"Ram\", age: 25 };","Key: value pairs"],
+["user.name  /  user[\"name\"]","Dot / bracket access (bracket = dynamic keys)"],
+["user.city = \"Chennai\"; / delete user.age;","Add-update / remove"],
+["\"name\" in user","Does the key exist?"],
+["{ name, age }","Shorthand for { name: name, age: age }"],
+["Object.keys(o) / values(o) / entries(o)","Arrays of keys / values / [key,value] pairs"],
+["Object.assign({}, o) / {...o}","Shallow copy or merge"],
+["structuredClone(o)","DEEP copy — nested objects too ✓"],
+["Object.freeze(o)","Lock object — no changes allowed"],
+["JSON.stringify(o) / JSON.parse(str)","Object → JSON text / JSON text → object"]
+]},
+{t:"Destructuring, Spread & Rest",items:[
+["const { name, age } = user;","Unpack object properties"],
+["const { name: n, city = \"NA\" } = user;","Rename + default value"],
+["const [a, b] = [1, 2];","Unpack array values"],
+["[a, b] = [b, a];","Swap two variables ✨"],
+["function show({ name }) {…}","Destructure right in the parameters"],
+["[...arr1, ...arr2] / {...o1, ...o2}","Spread OUT — merge arrays / objects"],
+["Math.max(...nums)","Spread array as separate arguments"],
+["const [first, ...rest] = arr;","Rest IN — first item, remainder as array"]
+]},
+{t:"Scope, Closures & this",items:[
+["Global / function / block scope","Where a variable is visible ({ } blocks for let/const)"],
+["Hoisting","Declarations move up; var = undefined, let/const = locked until their line"],
+["Closure","Inner function REMEMBERS outer variables after outer returns"],
+["function counter(){ let c=0; return () => ++c; }","Classic closure — private counter"],
+["this in obj.method()","= the object before the dot"],
+["this in arrow function","Borrowed from surrounding code (no own this)"],
+["fn.call(obj, a, b) / fn.apply(obj, [a,b])","Call fn with a chosen this"],
+["fn.bind(obj)","New function permanently tied to obj"]
+]},
+{t:"Classes & OOP",items:[
+["class Person { constructor(name){ this.name = name } }","Blueprint; constructor runs on new"],
+["const p = new Person(\"Ram\");","Create an instance"],
+["greet() { return `Hi ${this.name}` }","Method inside a class"],
+["class Student extends Person { … }","Inheritance — reuse parent code"],
+["super(name); / super.greet();","Call parent constructor / parent method"],
+["static create() {…}","Called on the class itself: Person.create()"],
+["#secret = 1;","Private field — only inside the class"],
+["get full() {…} / set full(v) {…}","Read/write like a property: p.full"],
+["Person.prototype","Shared object all instances borrow methods from"],
+["Object.create(proto) / Object.getPrototypeOf(o)","Create with prototype / inspect it"]
+]},
+{t:"Error Handling",items:[
+["try { … } catch (err) { … } finally { … }","Try risky code, handle failure, always cleanup"],
+["err.name / err.message / err.stack","Error details"],
+["throw new Error(\"Something broke\")","Create your own error"],
+["TypeError, RangeError, SyntaxError, ReferenceError","Built-in error types"],
+["class MyError extends Error { … }","Custom error class"]
+]},
+{t:"Async: Promises & await",items:[
+["new Promise((resolve, reject) => {…})","A value that arrives later (pending → fulfilled/rejected)"],
+["p.then(v => …).catch(e => …).finally(() => …)","On success / failure / always"],
+["async function f() { … }","Function that returns a promise"],
+["const data = await promise;","Pause here until the promise settles ✓"],
+["try { await f() } catch (e) { … }","Error handling with await"],
+["Promise.all([p1, p2])","Wait for ALL (fails if any fails)"],
+["Promise.allSettled([…])","Wait for all; get each result, never throws"],
+["Promise.race([…]) / Promise.any([…])","First to finish / first to SUCCEED"],
+["Microtasks before macrotasks","Promises run before setTimeout in the event loop"]
+]},
+{t:"Fetch API (HTTP)",items:[
+["const res = await fetch(url);","GET request"],
+["if (!res.ok) throw new Error(res.status);","Check for 404 / 500"],
+["const data = await res.json();","Parse the JSON body"],
+["fetch(url, { method: \"POST\", headers: { \"Content-Type\": \"application/json\" }, body: JSON.stringify(obj) })","Send data"],
+["Methods: GET POST PUT PATCH DELETE","Read / create / replace / edit / remove"],
+["res.status / res.text()","Status code / body as plain text"]
+]},
+{t:"DOM: Select & Change",items:[
+["document.querySelector(\".btn\")","FIRST match — any CSS selector ✓"],
+["document.querySelectorAll(\"li\")","ALL matches (loop with forEach)"],
+["document.getElementById(\"id\")","Select by id"],
+["el.textContent = \"Hi\"","Change text (safe ✓)"],
+["el.innerHTML = \"<b>Hi</b>\"","Change HTML (risky with user input)"],
+["input.value","Get / set a form field's value"],
+["el.classList.add(\"on\") / remove / toggle / contains","Manage classes ✓"],
+["el.style.backgroundColor = \"red\"","Inline style (camelCase)"],
+["el.setAttribute(\"src\", \"a.png\") / getAttribute","Set / read attributes"],
+["el.dataset.userId","Read data-user-id=\"…\""],
+["document.createElement(\"div\")","Make a new element"],
+["parent.append(el) / prepend(el) / el.remove()","Insert at end / start / delete"],
+["el.closest(\".card\") / el.parentElement / el.children","Walk the tree"]
+]},
+{t:"Events",items:[
+["el.addEventListener(\"click\", e => {…})","React to events ✓"],
+["el.removeEventListener(\"click\", fn)","Stop listening (fn must be named)"],
+["e.target / e.currentTarget","Element clicked / element with the listener"],
+["e.preventDefault()","Stop default (form reload, link jump)"],
+["e.stopPropagation()","Stop bubbling to parents"],
+["e.key","Which keyboard key (keydown/keyup)"],
+["Types: click, input, change, submit, keydown, scroll, DOMContentLoaded","The everyday events"],
+["Delegation: list.addEventListener(\"click\", e => { if (e.target.matches(\"li\")) … })","ONE parent listener handles all children ✓"],
+["addEventListener(\"click\", fn, { once: true })","Runs only one time"]
+]},
+{t:"Storage & Timers",items:[
+["localStorage.setItem(\"key\", value)","Save (stays forever, string only)"],
+["localStorage.getItem(\"key\")","Read (string or null)"],
+["localStorage.removeItem(\"key\") / clear()","Delete one / all"],
+["sessionStorage","Same API — cleared when the tab closes"],
+["JSON.stringify to save, JSON.parse to read","Storing objects in storage"],
+["setTimeout(fn, 2000)","Run once after 2 s"],
+["setInterval(fn, 1000)","Run every 1 s"],
+["clearTimeout(id) / clearInterval(id)","Cancel them"]
+]},
+{t:"Modules",items:[
+["<script type=\"module\" src=\"app.js\">","Enable modules in HTML"],
+["export const x = 5;","Named export (many per file)"],
+["export default MyClass;","Default export (one per file)"],
+["import { x, f } from \"./utils.js\";","Import named (exact names)"],
+["import MyClass from \"./c.js\";","Import the default (any name)"],
+["import * as utils from \"./u.js\";","Everything as one object"],
+["const mod = await import(\"./m.js\");","Dynamic import — load on demand"]
+]},
+{t:"Map, Set & Modern Extras",items:[
+["const m = new Map(); m.set(k, v); m.get(k)","Key→value pairs; keys can be ANY type"],
+["m.has(k) / m.delete(k) / m.size","Check / remove / count"],
+["const s = new Set([1, 2, 2]);","Unique values only → {1, 2}"],
+["s.add(x) / s.has(x) / s.delete(x)","Manage a set"],
+["WeakMap / WeakSet","Object keys, auto-cleaned by garbage collector"],
+["function* gen() { yield 1; yield 2; }","Generator — pauses at each yield"],
+["gen().next() → { value, done }","Resume step by step"],
+["Symbol(\"id\")","Guaranteed-unique value (hidden object keys)"],
+["123_456_789 / 10n","Numeric separators / BigInt"],
+["Object.groupBy(arr, fn)","Group array items into an object (ES2024)"]
+]},
+{t:"Regex & Dates",items:[
+["/pattern/gi","Regex between slashes; g = all, i = ignore case"],
+["\\d \\w \\s  and  \\D \\W \\S","Digit / word char / space — capitals = NOT"],
+["^ $ . * + ? {2,4}","Start, end, any char, 0+, 1+, optional, count range"],
+["[abc] [^abc] [a-z] (x|y)","Any of / none of / range / OR + group"],
+["regex.test(str) / str.match(regex) / str.replace(regex, \"new\")","Check / extract / swap"],
+["new Date() / Date.now()","Current date-time / timestamp in ms"],
+["d.getFullYear() / getMonth() / getDate() / getDay()","Year / month (0 = Jan ⚠) / day / weekday (0 = Sun)"],
+["d.getHours() / getMinutes() / getTime()","Time parts / ms since 1970"],
+["d.toLocaleDateString(\"en-IN\") / d.toISOString()","Local format / standard format"],
+["date2 - date1","Difference in milliseconds"]
+]}
+]},
+python: { word:"Python", brk:">>>", sections:[
+{t:"Basics & print",items:[
+["print(\"Hello\")","Print to the screen"],
+["print(a, b, sep=\"-\", end=\"!\")","Custom separator & line ending"],
+["name = input(\"Name? \")","Ask user for input (always returns a string)"],
+["# comment","Single-line comment"],
+["\"\"\"docstring / multi-line\"\"\"","Triple quotes — multi-line text or docs"],
+["x = 5","Create a variable — no keyword needed"],
+["a, b = 1, 2","Multiple assignment (a=1, b=2)"],
+["a, b = b, a","Swap two variables ✨"],
+["snake_case","Naming style for variables & functions"],
+["type(x) / help(len)","Check a value's type / read built-in docs"],
+["Indentation matters!","Blocks are made by 4-space indents, not { }"]
+]},
+{t:"Data Types & Conversion",items:[
+["int, float, str, bool","42 / 3.14 / \"text\" / True, False (capital!)"],
+["None","Empty value (like null)"],
+["list [1, 2] / tuple (1, 2) / dict {\"a\": 1} / set {1, 2}","The 4 collections"],
+["int(\"12\") / float(\"3.1\") / str(99)","Convert between types"],
+["list(\"abc\")","→ [\"a\", \"b\", \"c\"]"],
+["bool(x)","Falsy: 0, \"\", None, [], {}, () — else True"],
+["isinstance(x, int)","Safe type check"],
+["x = 10_000_000","Underscores for readability"]
+]},
+{t:"Operators",items:[
+["+ - * / % **","Math; / always gives a float"],
+["//","Floor division: 7 // 2 → 3 (no decimals)"],
+["x += 1","Increase (there is NO x++ in Python)"],
+["== != > < >= <=","Comparisons"],
+["and / or / not","Logical operators (words, not && ||)"],
+["value in collection","Membership: \"a\" in \"cat\" → True"],
+["x is None","Identity check — use is for None"],
+["1 < x < 10","Chained comparison ✨"],
+["result = a if cond else b","Ternary expression"],
+["if (n := len(data)) > 5:","Walrus := — assign inside an expression"]
+]},
+{t:"Strings",items:[
+["f\"Hello {name}, age {age}\"","f-string — embed variables ✓"],
+["f\"{price:.2f}\" / f\"{n:,}\"","Format: 2 decimals / thousands commas"],
+["s[0] / s[-1]","First / last character"],
+["s[1:4] / s[:3] / s[::-1]","Slice / first 3 / reversed ✨"],
+["len(s)","Length"],
+["s.upper() / s.lower() / s.title()","Change case"],
+["s.strip()","Remove spaces at both ends"],
+["s.replace(\"a\", \"b\")","Swap all occurrences"],
+["s.split(\",\") / \"-\".join(lst)","String → list / list → string"],
+["s.startswith(\"He\") / s.endswith(\"lo\")","Prefix / suffix checks"],
+["s.find(\"a\") / s.count(\"a\")","Position (−1 if none) / occurrences"],
+["s.isdigit() / s.isalpha()","All digits? / all letters?"],
+["r\"C:\\new\\file\"","Raw string — backslashes stay literal"],
+["Strings are immutable","Methods return NEW strings"]
+]},
+{t:"Lists",items:[
+["nums = [1, 2, 3]","Create a list (ordered, changeable)"],
+["nums[0] / nums[-1] / nums[1:3]","Access & slice like strings"],
+["nums.append(4)","Add to the end"],
+["nums.insert(1, \"x\")","Insert at position 1"],
+["nums.extend([5, 6]) or nums + [5, 6]","Merge lists"],
+["nums.remove(2)","Delete first matching VALUE"],
+["nums.pop() / nums.pop(0)","Remove & return last / by INDEX"],
+["nums.sort() / nums.sort(reverse=True)","Sort in place, ascending / descending"],
+["sorted(nums)","Sorted COPY (original untouched) ✓"],
+["sorted(words, key=len)","Sort by a rule (here: by length)"],
+["nums.reverse() / nums[::-1]","Reverse in place / reversed copy"],
+["len(nums) / sum(nums) / min(nums) / max(nums)","Count / total / smallest / largest"],
+["3 in nums / nums.index(3) / nums.count(3)","Exists? / position / occurrences"],
+["copy = nums[:]  or  nums.copy()","Shallow copy (avoid b = a — same list!)"]
+]},
+{t:"Tuples & Sets",items:[
+["point = (3, 5)","Tuple — like a list but IMMUTABLE"],
+["x, y = point","Unpack a tuple into variables"],
+["single = (1,)","One-item tuple needs the comma"],
+["s = {1, 2, 2, 3}","Set — unique values only → {1, 2, 3}"],
+["s.add(4) / s.remove(2) / s.discard(9)","Add / remove (error if missing) / remove safely"],
+["a | b / a & b / a - b","Union / intersection / difference"],
+["set(my_list)","Remove duplicates from a list ✨"],
+["frozenset({1, 2})","Immutable set"]
+]},
+{t:"Dictionaries",items:[
+["user = {\"name\": \"Ram\", \"age\": 25}","Key: value pairs"],
+["user[\"name\"]","Read (KeyError if missing)"],
+["user.get(\"city\", \"NA\")","Read safely with a default ✓"],
+["user[\"city\"] = \"Chennai\"","Add or update"],
+["del user[\"age\"] / user.pop(\"age\")","Remove key / remove & return value"],
+["\"name\" in user","Does the key exist?"],
+["user.keys() / user.values() / user.items()","All keys / values / (key, value) pairs"],
+["for k, v in user.items():","Loop through pairs ✓"],
+["merged = d1 | d2","Merge dicts (later keys win)"],
+["user.setdefault(\"score\", 0)","Read; create with default if missing"],
+["{k: v * 2 for k, v in d.items()}","Dict comprehension"]
+]},
+{t:"Conditionals",items:[
+["if x > 5:\n    ...","if — note the colon and the indent"],
+["elif x > 2:","Extra condition (else-if)"],
+["else:","Runs when nothing matched"],
+["if not items:","Pythonic empty-check (empty list/str is falsy)"],
+["if 3 <= x <= 7:","Range check in one go"],
+["match cmd:\n    case \"start\": ...\n    case _: ...","match-case (like switch, Python 3.10+)"]
+]},
+{t:"Loops",items:[
+["for i in range(5):","0, 1, 2, 3, 4"],
+["range(2, 10, 2)","Start 2, stop before 10, step 2 → 2 4 6 8"],
+["for item in my_list:","Loop values directly ✓"],
+["for i, item in enumerate(my_list):","Index AND value together ✓"],
+["for a, b in zip(list1, list2):","Loop two lists in parallel"],
+["while x < 10:","Repeat while condition is true"],
+["break / continue","Exit loop / skip to next round"],
+["for ... else:","else runs only if loop finished WITHOUT break"],
+["for row in grid:\n    for cell in row:","Nested loops"]
+]},
+{t:"Functions",items:[
+["def greet(name):\n    return f\"Hi {name}\"","Define & return"],
+["def f(a, b=10):","Default parameter value"],
+["f(b=5, a=1)","Keyword arguments — any order"],
+["def f(*args):","Collect extra positional args as a tuple"],
+["def f(**kwargs):","Collect extra keyword args as a dict"],
+["f(*my_list) / f(**my_dict)","Unpack a collection INTO arguments"],
+["square = lambda x: x * x","Tiny one-line anonymous function"],
+["def f(x: int) -> str:","Type hints (documentation, not enforced)"],
+["\"\"\"What this does\"\"\"","Docstring — first line inside a function"],
+["global x / nonlocal x","Modify an outer variable (use sparingly)"]
+]},
+{t:"Comprehensions & Built-ins",items:[
+["[x * 2 for x in nums]","List comprehension — transform ✓"],
+["[x for x in nums if x > 2]","With a filter"],
+["[\"even\" if x%2==0 else \"odd\" for x in nums]","With if/else per item"],
+["{x * 2 for x in nums} / (x*2 for x in nums)","Set comprehension / generator (lazy)"],
+["map(func, nums) / filter(func, nums)","Apply / keep matching (wrap in list())"],
+["any(x > 5 for x in nums) / all(…)","At least one true / all true"],
+["sum() min() max() len() round() abs()","The everyday math built-ins"],
+["reversed(nums) / sorted(nums)","Reverse / sort — both return new"],
+["print(*nums)","Unpack when printing: 1 2 3"]
+]},
+{t:"Classes & OOP",items:[
+["class Person:\n    def __init__(self, name):\n        self.name = name","Blueprint; __init__ runs on creation"],
+["p = Person(\"Ram\")","Create an instance (no new keyword)"],
+["def greet(self):","Method — self = the current object (like this)"],
+["class Student(Person):","Inheritance"],
+["super().__init__(name)","Call the parent's constructor"],
+["def __str__(self):","What print(obj) shows"],
+["def __repr__(self) / __len__ / __eq__","Dunder methods customize behavior"],
+["count = 0  (at class level)","Class attribute — shared by all instances"],
+["@property\ndef full(self):","Method used like an attribute: p.full"],
+["@staticmethod / @classmethod","No self / receives the class (cls)"],
+["self._hint / self.__hidden","Convention private / name-mangled private"]
+]},
+{t:"Errors & Files",items:[
+["try:\n    ...\nexcept ValueError as e:\n    ...","Catch a specific error"],
+["except (TypeError, KeyError):","Catch several types"],
+["else: / finally:","Runs if NO error / runs always"],
+["raise ValueError(\"Bad input\")","Throw your own error"],
+["class MyError(Exception): pass","Custom exception"],
+["with open(\"f.txt\") as f:\n    text = f.read()","Read a file — auto-closes ✓"],
+["with open(\"f.txt\", \"w\") as f:\n    f.write(\"hi\")","Write (w = overwrite, a = append)"],
+["for line in f:","Loop a file line by line (memory-friendly)"],
+["import json → json.load(f) / json.dump(data, f)","Read / write JSON files"],
+["json.loads(s) / json.dumps(obj, indent=2)","JSON string ↔ Python object"]
+]},
+{t:"Modules & Standard Library",items:[
+["import math","Use as math.sqrt(16)"],
+["from math import sqrt, pi","Import specific names"],
+["import numpy as np","Rename on import"],
+["math: sqrt, floor, ceil, pi","Math helpers"],
+["random: randint(1,10), choice(lst), shuffle(lst)","Randomness"],
+["datetime: datetime.now(), timedelta(days=7)","Dates & times"],
+["os / pathlib: Path(\"f.txt\").exists()","Files & folders"],
+["collections: Counter, defaultdict","Count things / dict with auto-default"],
+["itertools: product, combinations","Looping power tools"],
+["pip install requests","Install third-party packages (terminal)"],
+["if __name__ == \"__main__\":","Run this only when file is executed directly"]
+]},
+{t:"Advanced",items:[
+["def gen():\n    yield 1\n    yield 2","Generator — pauses at each yield (lazy)"],
+["next(g) / for v in gen():","Pull values one by one / loop them all"],
+["squares = (x*x for x in range(10**9))","Generator expression — huge data, tiny memory"],
+["@my_decorator\ndef f(): ...","Decorator — wraps a function with extra behavior"],
+["def deco(fn):\n    def wrapper(*a, **k):\n        return fn(*a, **k)\n    return wrapper","Decorator skeleton"],
+["first, *rest = [1, 2, 3, 4]","Star unpacking (rest = [2, 3, 4])"],
+["a = b or \"default\"","Fallback value if b is falsy"],
+["from functools import lru_cache → @lru_cache","Auto-memoize a function"],
+["python -m venv env","Virtual environment (isolate packages)"],
+["assert x > 0, \"must be positive\"","Sanity check while developing"],
+["EAFP: try it, catch the error","Pythonic style — vs checking everything first"]
+]}
+]}
+};
+
+/* ============ APP LOGIC ============ */
+const content = document.getElementById("content");
+const chips = document.getElementById("chips");
+const searchInput = document.getElementById("searchInput");
+const resultCount = document.getElementById("resultCount");
+const emptyEl = document.getElementById("empty");
+const emptyQ = document.getElementById("emptyQ");
+const langWord = document.getElementById("langWord");
+const toast = document.getElementById("toast");
+let currentLang = "html";
+let toastTimer = null;
+
+function render(lang){
+  currentLang = lang;
+  document.body.dataset.lang = lang;
+  const data = DATA[lang];
+  langWord.textContent = data.word;
+  document.querySelectorAll(".switch-btn").forEach(b =>
+    b.setAttribute("aria-selected", b.dataset.lang === lang ? "true" : "false"));
+
+  // chips
+  chips.innerHTML = "";
+  data.sections.forEach((sec, i) => {
+    const c = document.createElement("button");
+    c.className = "chip";
+    c.textContent = sec.t;
+    c.addEventListener("click", () => {
+      const target = document.getElementById("sec-" + i);
+      target.classList.add("open");
+      target.scrollIntoView({ block: "start" });
+    });
+    chips.appendChild(c);
+  });
+
+  // sections
+  content.innerHTML = "";
+  data.sections.forEach((sec, i) => {
+    const section = document.createElement("section");
+    section.className = "section" + (i === 0 ? " open" : "");
+    section.id = "sec-" + i;
+
+    const head = document.createElement("button");
+    head.className = "sec-head";
+    head.setAttribute("aria-expanded", i === 0 ? "true" : "false");
+
+    const marker = document.createElement("span");
+    marker.className = "marker";
+    marker.textContent = data.brk;
+
+    const title = document.createElement("span");
+    title.className = "sec-title";
+    title.textContent = sec.t;
+
+    const count = document.createElement("span");
+    count.className = "sec-count";
+    count.textContent = sec.items.length + " items";
+
+    const chev = document.createElement("span");
+    chev.className = "chev";
+    chev.textContent = "▾";
+
+    head.append(marker, title, count, chev);
+    head.addEventListener("click", () => {
+      const open = section.classList.toggle("open");
+      head.setAttribute("aria-expanded", open);
+    });
+
+    const body = document.createElement("div");
+    body.className = "sec-body";
+    const grid = document.createElement("div");
+    grid.className = "entries";
+
+    sec.items.forEach(([syntax, desc]) => {
+      const card = document.createElement("button");
+      card.className = "entry";
+      card.title = "Click to copy";
+      const code = document.createElement("code");
+      code.textContent = syntax;
+      const d = document.createElement("span");
+      d.className = "desc";
+      d.textContent = desc;
+      card.append(code, d);
+      card.addEventListener("click", () => copyEntry(card, syntax));
+      grid.appendChild(card);
+    });
+
+    body.appendChild(grid);
+    section.append(head, body);
+    content.appendChild(section);
+  });
+
+  applySearch();
+}
+
+function copyEntry(card, text){
+  if (document.body.classList.contains("pg-open")) {
+    const mode = LANG_TO_MODE[currentLang];
+    pgSetMode(mode);
+    pgEditor.value = (pgEditor.value.trimEnd() ? pgEditor.value.trimEnd() + "\n" : "") + text + "\n";
+    pgBuffers[mode] = pgEditor.value;
+    toast.textContent = "Copied + added to playground";
+  } else {
+    toast.textContent = "Copied to clipboard";
+  }
+  const done = () => {
+    card.classList.add("copied");
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      card.classList.remove("copied");
+      toast.classList.remove("show");
+    }, 1400);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(done);
+  } else { done(); }
+}
+
+function highlight(el, raw, q){
+  if (!q) { el.textContent = raw; return; }
+  const idx = raw.toLowerCase().indexOf(q);
+  if (idx === -1) { el.textContent = raw; return; }
+  el.textContent = "";
+  el.append(document.createTextNode(raw.slice(0, idx)));
+  const mark = document.createElement("mark");
+  mark.textContent = raw.slice(idx, idx + q.length);
+  el.append(mark, document.createTextNode(raw.slice(idx + q.length)));
+}
+
+function applySearch(){
+  const q = searchInput.value.trim().toLowerCase();
+  const data = DATA[currentLang];
+  let total = 0;
+
+  data.sections.forEach((sec, i) => {
+    const section = document.getElementById("sec-" + i);
+    const cards = section.querySelectorAll(".entry");
+    const titleHit = q && sec.t.toLowerCase().includes(q);
+    let matches = 0;
+
+    cards.forEach((card, j) => {
+      const [syntax, desc] = sec.items[j];
+      const hit = !q || titleHit || syntax.toLowerCase().includes(q) || desc.toLowerCase().includes(q);
+      card.classList.toggle("hide", !hit);
+      highlight(card.querySelector("code"), syntax, hit ? q : "");
+      highlight(card.querySelector(".desc"), desc, hit ? q : "");
+      if (hit) matches++;
+    });
+
+    total += matches;
+    section.classList.toggle("match-hidden", q && matches === 0);
+    if (q && matches > 0) section.classList.add("open");
+  });
+
+  resultCount.textContent = q ? total + " result" + (total === 1 ? "" : "s") + " for \u201C" + searchInput.value.trim() + "\u201D" : "";
+  emptyQ.textContent = searchInput.value.trim();
+  emptyEl.classList.toggle("show", q && total === 0);
+}
+
+/* wiring */
+document.querySelectorAll(".switch-btn").forEach(b =>
+  b.addEventListener("click", () => {
+    render(b.dataset.lang);
+    if (document.body.classList.contains("pg-open")) pgSetMode(LANG_TO_MODE[b.dataset.lang]);
+  }));
+
+searchInput.addEventListener("input", applySearch);
+
+document.getElementById("expandAll").addEventListener("click", () =>
+  document.querySelectorAll(".section").forEach(s => s.classList.add("open")));
+document.getElementById("collapseAll").addEventListener("click", () =>
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("open")));
+
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== searchInput) {
+    e.preventDefault();
+    searchInput.focus();
+  }
+  if (e.key === "Escape" && document.activeElement === searchInput) {
+    searchInput.value = "";
+    applySearch();
+    searchInput.blur();
+  }
+});
+
+/* ============ PLAYGROUND ============ */
+const PG_SAMPLES = {
+  js: 'const nums = [1, 2, 3, 4, 5];\nconst doubled = nums.map(n => n * 2);\nconsole.log("Doubled:", doubled);\n\nconst total = nums.reduce((sum, n) => sum + n, 0);\nconsole.log("Total:", total);',
+  py: 'nums = [1, 2, 3, 4, 5]\ndoubled = [n * 2 for n in nums]\nprint("Doubled:", doubled)\n\ntotal = sum(nums)\nprint("Total:", total)',
+  web: '<style>\n  body { font-family: sans-serif; display: grid; place-items: center; height: 90vh; }\n  .card {\n    padding: 24px 34px; border-radius: 16px; color: white;\n    background: linear-gradient(135deg, #6366f1, #ec4899);\n    box-shadow: 0 10px 30px rgba(0,0,0,.25);\n    transition: transform .2s;\n  }\n  .card:hover { transform: scale(1.05) rotate(-1deg); }\n</style>\n\n<div class="card">\n  <h2>Hello, HTML + CSS! 🎨</h2>\n  <p>Edit me and press Run.</p>\n</div>'
+};
+const pgBuffers = { js: PG_SAMPLES.js, py: PG_SAMPLES.py, web: PG_SAMPLES.web };
+const LANG_TO_MODE = { html: "web", css: "web", js: "js", python: "py" };
+let pgMode = "js";
+let pyodide = null, pyodideLoading = null;
+
+const playground = document.getElementById("playground");
+const pgToggleBtn = document.getElementById("pgToggle");
+const pgEditor = document.getElementById("pgEditor");
+const pgOut = document.getElementById("pgOut");
+const pgFrame = document.getElementById("pgFrame");
+
+function pgPrint(text, cls){
+  const line = document.createElement("div");
+  line.className = "line" + (cls ? " " + cls : "");
+  line.textContent = text;
+  pgOut.appendChild(line);
+  pgOut.scrollTop = pgOut.scrollHeight;
+}
+
+function pgSetMode(mode){
+  pgBuffers[pgMode] = pgEditor.value;
+  pgMode = mode;
+  pgEditor.value = pgBuffers[mode];
+  playground.classList.toggle("web-mode", mode === "web");
+  document.querySelectorAll(".pg-tab").forEach(t =>
+    t.setAttribute("aria-selected", t.dataset.mode === mode ? "true" : "false"));
+}
+
+function pgOpen(open){
+  playground.classList.toggle("open", open);
+  document.body.classList.toggle("pg-open", open);
+  if (open) pgEditor.focus();
+}
+
+function fmtJS(v){
+  if (typeof v === "string") return v;
+  if (typeof v === "function") return String(v);
+  try { return JSON.stringify(v) ?? String(v); } catch { return String(v); }
+}
+
+function runJS(code){
+  const captured = { log: console.log, error: console.error, warn: console.warn, info: console.info };
+  const hook = tag => (...args) => {
+    pgPrint(args.map(fmtJS).join(" "), tag);
+    captured.log.apply(console, args);
+  };
+  console.log = hook(); console.info = hook();
+  console.warn = hook(); console.error = hook("err");
+  try {
+    const result = new Function(code)();
+    if (result !== undefined) pgPrint("→ " + fmtJS(result), "res");
+  } catch (e) {
+    pgPrint("✗ " + e, "err");
+  } finally {
+    Object.assign(console, captured);
+  }
+}
+
+function loadScriptOnce(src){
+  return new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = () => reject(new Error("Could not load " + src));
+    document.head.appendChild(s);
+  });
+}
+
+async function ensurePyodide(){
+  if (pyodide) return pyodide;
+  if (!pyodideLoading) {
+    pgPrint("Loading Python runtime… first time only (~10 MB, needs internet)", "dim");
+    pyodideLoading = loadScriptOnce("https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js")
+      .then(() => loadPyodide({ indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/" }))
+      .then(py => {
+        pyodide = py;
+        pgPrint("Python ready ✓", "dim");
+        return py;
+      })
+      .catch(e => {
+        pyodideLoading = null;
+        pgPrint("Python runtime could not load — check your internet and press Run to retry.", "dim");
+        throw e;
+      });
+  }
+  return pyodideLoading;
+}
+
+async function runPy(code){
+  try {
+    const py = await ensurePyodide();
+    py.setStdout({ batched: s => pgPrint(s) });
+    py.setStderr({ batched: s => pgPrint(s, "err") });
+    const result = await py.runPythonAsync(code);
+    if (result !== undefined && result !== null) pgPrint("→ " + String(result), "res");
+  } catch (e) {
+    const msg = String(e.message || e);
+    // show only the useful last lines of a Python traceback
+    const lines = msg.trim().split("\n");
+    pgPrint("✗ " + lines.slice(-3).join("\n"), "err");
+  }
+}
+
+function pgRunNow(){
+  pgBuffers[pgMode] = pgEditor.value;
+  const code = pgEditor.value;
+  if (pgMode === "web") { pgFrame.srcdoc = code; return; }
+  pgPrint("── run " + new Date().toLocaleTimeString() + " ──", "dim");
+  if (pgMode === "js") runJS(code);
+  else runPy(code);
+}
+
+/* playground wiring */
+pgToggleBtn.addEventListener("click", () => pgOpen(true));
+document.getElementById("pgClose").addEventListener("click", () => pgOpen(false));
+document.getElementById("pgRun").addEventListener("click", pgRunNow);
+document.getElementById("pgClear").addEventListener("click", () => { pgOut.innerHTML = ""; pgFrame.srcdoc = ""; });
+document.getElementById("pgReset").addEventListener("click", () => {
+  pgEditor.value = PG_SAMPLES[pgMode];
+  pgBuffers[pgMode] = PG_SAMPLES[pgMode];
+});
+document.querySelectorAll(".pg-tab").forEach(t =>
+  t.addEventListener("click", () => pgSetMode(t.dataset.mode)));
+
+pgEditor.addEventListener("keydown", e => {
+  if (e.key === "Tab") {
+    e.preventDefault();
+    const { selectionStart: s, selectionEnd: en, value } = pgEditor;
+    pgEditor.value = value.slice(0, s) + "    " + value.slice(en);
+    pgEditor.selectionStart = pgEditor.selectionEnd = s + 4;
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); pgRunNow(); }
+});
+pgEditor.value = pgBuffers[pgMode];
+
+render("html");
+</script>
+</body>
+</html>
